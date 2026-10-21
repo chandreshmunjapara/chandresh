@@ -9,11 +9,19 @@ const CONFIG = {
   ],
   gods: [ // put these photos in /images (any size). Edit names as you like.
     { src: "images/ganesh.jpg", sym: "ॐ", name: "શ્રી ગણેશાય નમઃ" },
-    { src: "images/ambe.jpg", sym: "શ્રી", name: "જય અંબે માઁ" }
+    { src: "images/ambe.jpg", sym: "શ્રી", name: "આઈ શ્રી ખોડીયાર માતાજી" }
   ],
+  // ---- Google Form connection (already set up) ----
+  form: {
+    action: "https://docs.google.com/forms/d/e/1FAIpQLScBoiDj-FOqhCbqGb1vhIdwhlRYBPO6x1Nan4defZlh1NCtHQ/formResponse",
+    fields: {
+      name: "entry.1498135098",
+      attend: "entry.877086558",
+      query: "entry.2606285"
+    }
+  },
   weddingDate: "2027-02-02T11:00:00",
   whatsapp: "919825167545", // country code + number, no + or spaces
-  message: "Hi! I will attend Chandresh & Janvi's wedding.",
   photos: [ // put your pictures in the /images folder and list them here
     { src: "images/1.jpeg" },
     { src: "images/2.jpeg" },
@@ -29,7 +37,6 @@ const CONFIG = {
     { src: "images/12.jpeg" },
     { src: "images/13.jpeg" },
     { src: "images/14.jpeg" }
-
   ]
 };
 
@@ -116,15 +123,27 @@ let m = "";
 for (let i = 0; i < 12; i++) m += `<ellipse cx="0" cy="-62" rx="11" ry="30" transform="rotate(${i * 30})"/><circle cx="0" cy="-92" r="4" transform="rotate(${i * 30 + 15})"/>`;
 document.getElementById("mandala").innerHTML = m + '<circle r="24"/><circle r="38"/>';
 
-/* Gods on the gate: photo if the file exists, otherwise a symbol */
+/* Gods on the gate: photo only (tries .jpg, .jpeg, .png, .webp automatically) */
 CONFIG.gods.forEach((g, i) => {
   const d = document.querySelector(`.deity[data-g="${i}"]`);
   if (!d) return;
-  d.querySelector("span").textContent = g.sym;
-  d.querySelector("small").textContent = g.name;
-  const im = new Image();
-  im.onload = () => { d.style.backgroundImage = `url(${g.src})`; d.classList.add("has"); };
-  im.src = g.src;
+  const w = document.createElement("div");   // frame + name below it
+  w.className = "dwrap";
+  d.replaceWith(w);
+  w.append(d);
+  const nm = document.createElement("p");
+  nm.className = "dname";
+  nm.textContent = g.name;
+  w.append(nm);
+  const base = g.src.replace(/\.\w+$/, "");
+  const tries = ["jpg", "jpeg", "png", "webp", "JPG", "JPEG", "PNG"].map(e => base + "." + e);
+  (function next(k) {
+    if (k >= tries.length) return;
+    const im = new Image();
+    im.onload = () => { d.style.backgroundImage = `url(${tries[k]})`; d.classList.add("has"); };
+    im.onerror = () => next(k + 1);
+    im.src = tries[k];
+  })(0);
 });
 
 
@@ -136,13 +155,26 @@ document.querySelectorAll(".cal").forEach(a => {
   a.href = "https://calendar.google.com/calendar/render?action=TEMPLATE&text=" + encodeURIComponent(ev.name + " - Chandresh & Janvi") + "&dates=" + ev.start + "/" + ev.end + "&location=" + encodeURIComponent(CONFIG.venue);
   a.target = "_blank"; a.rel = "noopener";
 });
-const gname = document.getElementById("gname"), wa = document.getElementById("wa");
-function setWa() {
-  const who = gname.value.trim() || "A guest";
-  const msg = `Hi! This is ${who}. I will attend Chandresh & Janvi's wedding.`;
-  wa.href = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`;
-}
-gname.addEventListener("input", setWa); setWa();
+const rsvpForm = document.getElementById("rsvp-form"), rsvpMsg = document.getElementById("rsvp-msg"), sendBtn = document.getElementById("send");
+document.getElementById("wa").href = "https://wa.me/" + CONFIG.whatsapp;
+rsvpForm.addEventListener("submit", async e => {
+  e.preventDefault();
+  const f = CONFIG.form, el = rsvpForm.elements;
+  if (f.action.includes("YOUR_FORM_ID") || f.fields.name === "entry.0000000000") { rsvpMsg.textContent = "The RSVP form is not connected yet."; return; }
+  const d = new FormData();
+  d.append(f.fields.name, el.gname.value.trim());
+  d.append(f.fields.attend, el.attend.value);
+  d.append(f.fields.query, el.gquery.value.trim());
+  sendBtn.disabled = true; sendBtn.textContent = "Sending…"; rsvpMsg.textContent = "";
+  try {
+    await fetch(f.action, { method: "POST", mode: "no-cors", body: d });
+    rsvpMsg.textContent = "Thank you! Your Message has been received. 🙏";
+    rsvpForm.reset();
+  } catch (err) {
+    rsvpMsg.textContent = "Sorry, something went wrong. Please check your internet and try again.";
+  }
+  sendBtn.disabled = false; sendBtn.textContent = "Send Message";
+});
 
 /* Opening screen + music */
 history.scrollRestoration = "manual"; scrollTo(0, 0);

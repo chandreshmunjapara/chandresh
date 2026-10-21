@@ -12,13 +12,24 @@ const CONFIG = {
     { src: "images/ambe.jpg", sym: "શ્રી", name: "જય અંબે માઁ" }
   ],
   weddingDate: "2027-02-02T11:00:00",
-  whatsapp: "919999999999", // country code + number, no + or spaces
+  whatsapp: "919825167545", // country code + number, no + or spaces
   message: "Hi! I will attend Chandresh & Janvi's wedding.",
   photos: [ // put your pictures in the /images folder and list them here
-    { src: "images/1.jpg" },
-    { src: "images/2.jpg" },
-    { src: "images/3.jpg" },
-    { src: "images/4.jpg" }
+    { src: "images/1.jpeg" },
+    { src: "images/2.jpeg" },
+    { src: "images/3.jpeg" },
+    { src: "images/4.jpeg" },
+    { src: "images/5.jpeg" },
+    { src: "images/6.jpeg" },
+    { src: "images/7.jpeg" },
+    { src: "images/8.jpeg" },
+    { src: "images/9.jpeg" },
+    { src: "images/10.jpeg" },
+    { src: "images/11.jpeg" },
+    { src: "images/12.jpeg" },
+    { src: "images/13.jpeg" },
+    { src: "images/14.jpeg" }
+
   ]
 };
 

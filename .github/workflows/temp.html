@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wedding Invitation | Alex & Taylor</title>
+    <!-- Google Fonts for elegant typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            background-color: #fdfcf8;
+            color: #333;
+            text-align: center;
+        }
+        /* Hero Section with Background Image */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            /* Replace the URL with your own background image if you like */
+            background: linear-gradient(rgba(255,252,248,0.7), rgba(255,252,248,0.8)), url('https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+            padding: 20px;
+        }
+        h1 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 5rem;
+            color: #5a5a5a;
+            margin: 10px 0;
+        }
+        .subtitle {
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            color: #7a7a7a;
+        }
+        .date {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #bfa15f; /* Elegant Gold */
+        }
+        
+        /* Details Section */
+        .details {
+            padding: 60px 20px;
+            background-color: #fff;
+        }
+        .details h2 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3.5rem;
+            color: #bfa15f;
+            margin-bottom: 20px;
+            margin-top: 0;
+        }
+        .info-card {
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+        
+        /* Countdown Timer */
+        .countdown-container {
+            padding: 40px 20px;
+            background-color: #fdfcf8;
+        }
+        .countdown {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .time-box {
+            background: #bfa15f;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            min-width: 70px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .time-box span {
+            display: block;
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+        .time-box small {
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 600px) {
+            h1 { font-size: 3.5rem; }
+            .time-box { min-width: 50px; padding: 10px 15px; }
+            .time-box span { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Main Hero Section -->
+    <header class="hero">
+        <div class="subtitle">We Are Getting Married</div>
+        <h1>Alex & Taylor</h1>
+        <div class="date">December 31, 2026</div>
+    </header>
+
+    <!-- Venue & Details -->
+    <section class="details">
+        <h2>The Details</h2>
+        <div class="info-card">
+            <p><strong>Ceremony & Reception</strong></p>
+            <p>The Grand Botanical Gardens<br>
+            123 Rosewood Lane<br>
+            Cityville, State 12345</p>
+            <p><em>Ceremony begins at 4:00 PM<br>Reception and dancing to follow.</em></p>
+        </div>
+    </section>
+
+    <!-- Countdown Section -->
+    <section class="countdown-container">
+        <h2>Counting Down</h2>
+        <div class="countdown">
+            <div class="time-box">
+                <span id="days">00</span>
+                <small>Days</small>
+            </div>
+            <div class="time-box">
+                <span id="hours">00</span>
+                <small>Hours</small>
+            </div>
+            <div class="time-box">
+                <span id="minutes">00</span>
+                <small>Minutes</small>
+            </div>
+            <div class="time-box">
+                <span id="seconds">00</span>
+                <small>Seconds</small>
+            </div>
+        </div>
+    </section>
+
+    <!-- Countdown Logic -->
+    <script>
+        // Set your wedding date here (Format: "Month DD, YYYY HH:MM:SS")
+        const weddingDate = new Date("Dec 31, 2026 16:00:00").getTime();
+
+        const timer = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = weddingDate - now;
+
+            // Math for days, hours, minutes and seconds
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Display results
+            document.getElementById("days").innerText = days.toString().padStart(2, '0');
+            document.getElementById("hours").innerText = hours.toString().padStart(2, '0');
+            document.getElementById("minutes").innerText = minutes.toString().padStart(2, '0');
+            document.getElementById("seconds").innerText = seconds.toString().padStart(2, '0');
+
+            // If the date has passed
+            if (distance < 0) {
+                clearInterval(timer);
+                document.querySelector(".countdown").innerHTML = "<h2>Just Married!</h2>";
+            }
+        }, 1000);
+    </script>
+
+</body>
+</html>

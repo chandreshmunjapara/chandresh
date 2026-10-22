@@ -77,7 +77,7 @@ function onScroll() {
   if (p > 0.92 && !burst) { burst = true; petalBurst(); } else if (p < 0.5) burst = false;
   stage.style.setProperty("--s", 0.8 + p * 0.2);
   stage.style.setProperty("--fo", Math.max(0, 1 - Math.max(0, p - 0.75) * 4));
-  stage.style.setProperty("--o", 0.2 + p * 0.8);
+  stage.style.setProperty("--o", Math.max(0, (p - 0.25) / 0.75));
   document.body.classList.toggle("scrolled", scrollY > innerHeight * 0.4);
 }
 addEventListener("scroll", onScroll, { passive: true });
@@ -140,7 +140,7 @@ CONFIG.gods.forEach((g, i) => {
   (function next(k) {
     if (k >= tries.length) return;
     const im = new Image();
-    im.onload = () => { d.style.backgroundImage = `url(${tries[k]})`; d.classList.add("has"); };
+    im.onload = () => { d.style.backgroundImage = `url(${tries[k]})`; d.style.setProperty("--ar", im.naturalWidth / im.naturalHeight); d.classList.add("has"); };
     im.onerror = () => next(k + 1);
     im.src = tries[k];
   })(0);

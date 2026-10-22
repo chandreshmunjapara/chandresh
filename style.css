@@ -244,7 +244,7 @@ h1.script{font-size:clamp(2.7rem,10.5vw,5.8rem)}
 .door::before{display:none}
 /* deity photo = the frame itself (shows the whole picture), name below it */
 .dwrap{top:calc(var(--tor1) + 3rem);width:calc(100% - 24px);max-width:380px;height:auto;min-height:0;aspect-ratio:auto;--dh:calc(100svh - var(--tor1) - 3rem - var(--H) - 3svh - 3rem)}
-.dwrap .deity{flex:none;width:100%;height:auto;max-height:var(--dh);aspect-ratio:4/5}
-.dwrap .deity.has{width:auto;max-width:100%;aspect-ratio:auto;border:0;background:none;box-shadow:none;overflow:visible}
-.deity img{display:block;max-width:100%;max-height:var(--dh);width:auto;height:auto;border:4px solid var(--gold);border-radius:999px 999px 10px 10px;box-shadow:0 0 24px #ffb30088,0 8px 18px #0008}
 .dname{background:#3a0911e6;border:1px solid var(--gold);border-radius:20px;padding:.2rem .8rem}
+/* photo frame takes the exact shape of the picture, so the whole photo shows */
+.dwrap .deity{flex:none;height:auto;max-height:none;aspect-ratio:var(--ar,.8);width:min(100%,calc(var(--dh)*var(--ar,.8)))}
+.deity.has{background-color:#3a0911}

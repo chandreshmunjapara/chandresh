@@ -248,3 +248,8 @@ h1.script{font-size:clamp(2.7rem,10.5vw,5.8rem)}
 /* photo frame takes the exact shape of the picture, so the whole photo shows */
 .dwrap .deity{flex:none;height:auto;max-height:none;aspect-ratio:var(--ar,.8);width:min(100%,calc(var(--dh)*var(--ar,.8)))}
 .deity.has{background-color:#3a0911}
+
+/* heart sits in line with the names, exactly between them */
+.names{--nfs:clamp(1.8rem,min(8.4vw,6svh),3.4rem)}
+.names b{font-size:var(--nfs)}
+.names i{align-self:start;display:flex;align-items:center;justify-content:center;height:calc(var(--nfs)*1.15);margin:0;padding-top:.15em;line-height:1}

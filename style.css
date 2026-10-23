@@ -366,3 +366,25 @@ body.gu .names{--nfs:clamp(1.6rem,min(7.6vw,5.4svh),2.8rem)}
 
 /* golden marigold thread = scroll progress */
 body::after{content:"";position:fixed;left:0;bottom:0;height:4px;width:100%;transform-origin:0 50%;transform:scaleX(var(--sp2,0));background:linear-gradient(90deg,#ff9d00,#ffe28a);z-index:300;pointer-events:none}
+
+/* ===== Celebrations: fixed columns (3 on desktop, 2 on phone), last row centred, buttons aligned ===== */
+.tl{display:flex;flex-wrap:wrap;justify-content:center;gap:1rem;max-width:920px;margin:2.4rem auto 1.5rem}
+.ev{flex:0 0 calc((100% - 1rem)/2);min-width:0}
+@media(min-width:700px){.ev{flex-basis:calc((100% - 2rem)/3);border-radius:120px 120px 14px 14px;padding-top:1.6rem}}
+.ev>div:last-child{flex:1;width:100%;display:flex;flex-direction:column;align-items:center}
+.ev p:nth-last-of-type(1){margin-bottom:.9rem}
+.ev .cal{margin-top:auto}
+
+/* ===== Mobile polish ===== */
+.rsvp-form input,.rsvp-form textarea{flex:none}
+#lang{height:40px;padding:0 .9rem;font-size:.9rem;opacity:.95}
+#snd{width:40px;height:40px;font-size:1.1rem}
+#hero{padding-bottom:calc(4.2rem + env(safe-area-inset-bottom,0px))}
+@media(max-width:600px){.hint{font-size:.78rem;padding:.3rem .8rem}}
+.dwrap{top:calc(var(--tor1) + 3.8rem);--dh:calc(100svh - var(--tor1) - 3.8rem - var(--H) - 3svh - 3rem)}
+
+/* small phones: names never break in the middle, shorter screens drop the extras */
+.names{--nfs:clamp(1.45rem,min(8.4vw,6svh),3.4rem)}
+body.gu .names{--nfs:clamp(1.4rem,min(7.6vw,5.4svh),2.8rem)}
+.names b{overflow-wrap:normal;word-break:normal;hyphens:none}
+@media(max-height:640px){.diyas{display:none}.inside .small{display:none}}

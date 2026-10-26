@@ -9,62 +9,82 @@ const CONFIG = {
   schedule: [
     // NOTE: Sangeet (1 Feb, 7 PM, Sanali) and Wedding (2 Feb, 11 AM) are your real details.
     // The other times below are SAMPLES - please correct them, or delete the blocks you do not need.
-    { icon: "🌺", title: { en: "Mandap Muhurat", gu: "મંડપ મુહૂર્ત" },
+    {
+      icon: "🌺", title: { en: "Mandap Muhurat", gu: "મંડપ મુહૂર્ત" },
       date: { en: "Monday<br>01 February 2027", gu: "સોમવાર<br>૦૧ ફેબ્રુઆરી ૨૦૨૭" },
       time: { en: "9:00 AM", gu: "સવારે ૯:૦૦ કલાકે" },
       place: { en: "Kunkavav", gu: "કુંકાવાવ" },
-      cal: { start: "20270201T090000", end: "20270201T110000" } },
-    { icon: "🌼", title: { en: "Haldi Rasam", gu: "હલ્દી રસમ" },
+      cal: { start: "20270201T090000", end: "20270201T110000" }
+    },
+    {
+      icon: "🌼", title: { en: "Haldi Rasam", gu: "હલ્દી રસમ" },
       date: { en: "Monday<br>01 February 2027", gu: "સોમવાર<br>૦૧ ફેબ્રુઆરી ૨૦૨૭" },
       time: { en: "4:00 PM", gu: "બપોરે ૪:૦૦ કલાકે" },
       place: { en: "Kunkavav", gu: "કુંકાવાવ" },
-      cal: { start: "20270201T160000", end: "20270201T183000" } },
-    { icon: "🎶", title: { en: "Sangeet Sandhya", gu: "સંગીત સંધ્યા" },
+      cal: { start: "20270201T160000", end: "20270201T183000" }
+    },
+    {
+      icon: "🎶", title: { en: "Sangeet Sandhya", gu: "સંગીત સંધ્યા" },
       date: { en: "Monday<br>01 February 2027", gu: "સોમવાર<br>૦૧ ફેબ્રુઆરી ૨૦૨૭" },
       time: { en: "7:00 PM onwards", gu: "સાંજે ૭:૦૦ કલાકથી" },
       place: { en: "Sanali", gu: "સનાળી" },
-      cal: { start: "20270201T190000", end: "20270201T230000", location: "Sanali, Gujarat" } },
-    { icon: "🐎", title: { en: "Jan Aagman (Baraat arrival)", gu: "જાન આગમન" },
+      cal: { start: "20270201T190000", end: "20270201T230000", location: "Sanali, Gujarat" }
+    },
+    {
+      icon: "🐎", title: { en: "Jan Aagman (Baraat arrival)", gu: "જાન આગમન" },
       date: { en: "Tuesday<br>02 February 2027", gu: "મંગળવાર<br>૦૨ ફેબ્રુઆરી ૨૦૨૭" },
       time: { en: "9:30 AM", gu: "સવારે ૯:૩૦ કલાકે" },
       place: { en: "Kunkavav", gu: "કુંકાવાવ" },
-      cal: { start: "20270202T093000", end: "20270202T110000" } },
-    { icon: "🔔", title: { en: "Hast Melap (Wedding)", gu: "હસ્ત મેળાપ (શુભ લગ્ન)" },
+      cal: { start: "20270202T093000", end: "20270202T110000" }
+    },
+    {
+      icon: "🔔", title: { en: "Hast Melap (Wedding)", gu: "હસ્ત મેળાપ (શુભ લગ્ન)" },
       date: { en: "Tuesday<br>02 February 2027", gu: "મંગળવાર<br>૦૨ ફેબ્રુઆરી ૨૦૨૭" },
       time: { en: "11:00 AM", gu: "સવારે ૧૧:૦૦ કલાકે" },
       place: { en: "Kunkavav", gu: "કુંકાવાવ" },
-      cal: { start: "20270202T110000", end: "20270202T130000" } },
-    { icon: "🍽️", title: { en: "Bhojan Samarambh (Lunch)", gu: "ભોજન સમારંભ" },
+      cal: { start: "20270202T110000", end: "20270202T130000" }
+    },
+    {
+      icon: "🍽️", title: { en: "Bhojan Samarambh (Lunch)", gu: "ભોજન સમારંભ" },
       date: { en: "Tuesday<br>02 February 2027", gu: "મંગળવાર<br>૦૨ ફેબ્રુઆરી ૨૦૨૭" },
       time: { en: "1:00 PM", gu: "બપોરે ૧:૦૦ કલાકે" },
       place: { en: "Kunkavav", gu: "કુંકાવાવ" },
-      cal: { start: "20270202T130000", end: "20270202T160000" } }
+      cal: { start: "20270202T130000", end: "20270202T160000" }
+    }
   ],
 
   // ---- Family names (like "Sneh Bandhan" on the printed card). A group shows only if it has names. ----
   families: [
-    { key: "hosts", title: { en: "Hosts of the occasion", gu: "અવસરના અભિલાષી" },
+    {
+      key: "hosts", title: { en: "Hosts of the occasion", gu: "અવસરના અભિલાષી" },
       names: [
         { en: "Mr. Dhirubhai Munjapara & Mrs. Rasilaben Munjapara", gu: "શ્રી ધીરુભાઈ મુંજપરા તથા સૌ. રસીલાબેન મુંજપરા" },
         { en: "Mr. Manubhai Desai & Mrs. Neetaben Desai", gu: "શ્રી મનુભાઈ દેસાઈ તથા સૌ. નીતાબેન દેસાઈ" }
-      ] },
+      ]
+    },
     // SAMPLE names below - replace "Name Surname" / "નામ અટક" with real names, add more lines, or delete a group.
-    { key: "nephews", title: { en: "Dear nephews", gu: "વ્હાલા ભાણેજો" },
+    {
+      key: "nephews", title: { en: "Dear nephews", gu: "વ્હાલા ભાણેજો" },
       names: [
         { en: "Mr. Name Surname - Town", gu: "શ્રી નામ અટક - ગામ" },
         { en: "Mr. Name Surname - Town", gu: "શ્રી નામ અટક - ગામ" }
-      ] },
-    { key: "mosal", title: { en: "Maternal family (Mosal)", gu: "મોસાળ પક્ષ" },
+      ]
+    },
+    {
+      key: "mosal", title: { en: "Maternal family (Mosal)", gu: "મોસાળ પક્ષ" },
       names: [
         { en: "Mr. Name Surname", gu: "શ્રી નામ અટક" },
         { en: "Mr. Name Surname", gu: "શ્રી નામ અટક" }
-      ] },
-    { key: "love", title: { en: "With love", gu: "સ્નેહાધીન" },
+      ]
+    },
+    {
+      key: "love", title: { en: "With love", gu: "સ્નેહાધીન" },
       names: [
         { en: "Mr. Name Surname", gu: "શ્રી નામ અટક" },
         { en: "Mr. Name Surname", gu: "શ્રી નામ અટક" },
         { en: "Mr. Name Surname", gu: "શ્રી નામ અટક" }
-      ] }
+      ]
+    }
   ],
   // ---- Optional: keep the family names in a Google Sheet so you can add names any time, without touching code ----
   // Sheet columns: group | english | gujarati   (group = hosts, nephews, mosal, love, or any new heading you like)
@@ -72,6 +92,7 @@ const CONFIG = {
   namesSheet: "",
   famNote: { en: "Jai Shree Krishna", gu: "જય શ્રી કૃષ્ણ" },   // closing line under the family names (leave "" to hide)
   music: "music.mp3", // optional: put a song named music.mp3 next to index.html
+  bgVideo: "images/bgvideo.mp4", // Put your .mp4 video in the images folder
   gods: [ // put these photos in /images (any size). Edit names as you like.
     { src: "images/ganesh.jpg", sym: "ॐ", name: "શ્રી ગણેશાય નમઃ" },
     { src: "images/ambe.jpg", sym: "શ્રી", name: "આઈ શ્રી ખોડીયાર માતાજી" }
@@ -107,7 +128,7 @@ const CONFIG = {
 
 /* Language helpers */
 let LANG = CONFIG.defaultLang || "en";
-try { LANG = localStorage.getItem("lang") || LANG; } catch (e) {}
+try { LANG = localStorage.getItem("lang") || LANG; } catch (e) { }
 const tr = (en, gu) => (LANG === "gu" ? gu : en);
 const L = o => (LANG === "gu" && o.gu ? o.gu : o.en);
 const GUD = "૦૧૨૩૪૫૬૭૮૯";
@@ -256,7 +277,7 @@ document.getElementById("open").onclick = () => {
   document.body.classList.add("ready");
   setTimeout(() => intro.remove(), 1300);
   au = new Audio(CONFIG.music); au.loop = true; au.volume = 0.6;
-  au.play().then(() => { snd.hidden = false; }).catch(() => {});
+  au.play().then(() => { snd.hidden = false; }).catch(() => { });
 };
 snd.onclick = () => { if (au.paused) { au.play(); snd.textContent = "🔊"; } else { au.pause(); snd.textContent = "🔇"; } };
 
@@ -290,7 +311,7 @@ function applyLang() {
   renderDynamic();
   langBtn.textContent = LANG === "gu" ? "English" : "ગુજરાતી";
 }
-langBtn.onclick = () => { LANG = LANG === "gu" ? "en" : "gu"; try { localStorage.setItem("lang", LANG); } catch (e) {} applyLang(); };
+langBtn.onclick = () => { LANG = LANG === "gu" ? "en" : "gu"; try { localStorage.setItem("lang", LANG); } catch (e) { } applyLang(); };
 document.getElementById("venue-map").href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(CONFIG.venue);
 applyLang();
 
@@ -328,3 +349,8 @@ async function loadNames() {
   } catch (e) { /* offline or blocked: the names written in CONFIG stay */ }
 }
 loadNames();
+const bgVid = document.getElementById("bg-vid");
+if (CONFIG.bgVideo && bgVid) {
+  bgVid.src = CONFIG.bgVideo;
+  bgVid.hidden = false;
+}

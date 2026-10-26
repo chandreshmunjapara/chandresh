@@ -43,29 +43,33 @@ const CONFIG = {
 
   // ---- Family names (like "Sneh Bandhan" on the printed card). A group shows only if it has names. ----
   families: [
-    { title: { en: "Hosts of the occasion", gu: "અવસરના અભિલાષી" },
+    { key: "hosts", title: { en: "Hosts of the occasion", gu: "અવસરના અભિલાષી" },
       names: [
         { en: "Mr. Dhirubhai Munjapara & Mrs. Rasilaben Munjapara", gu: "શ્રી ધીરુભાઈ મુંજપરા તથા સૌ. રસીલાબેન મુંજપરા" },
         { en: "Mr. Manubhai Desai & Mrs. Neetaben Desai", gu: "શ્રી મનુભાઈ દેસાઈ તથા સૌ. નીતાબેન દેસાઈ" }
       ] },
     // SAMPLE names below - replace "Name Surname" / "નામ અટક" with real names, add more lines, or delete a group.
-    { title: { en: "Dear nephews", gu: "વ્હાલા ભાણેજો" },
+    { key: "nephews", title: { en: "Dear nephews", gu: "વ્હાલા ભાણેજો" },
       names: [
         { en: "Mr. Name Surname - Town", gu: "શ્રી નામ અટક - ગામ" },
         { en: "Mr. Name Surname - Town", gu: "શ્રી નામ અટક - ગામ" }
       ] },
-    { title: { en: "Maternal family (Mosal)", gu: "મોસાળ પક્ષ" },
+    { key: "mosal", title: { en: "Maternal family (Mosal)", gu: "મોસાળ પક્ષ" },
       names: [
         { en: "Mr. Name Surname", gu: "શ્રી નામ અટક" },
         { en: "Mr. Name Surname", gu: "શ્રી નામ અટક" }
       ] },
-    { title: { en: "With love", gu: "સ્નેહાધીન" },
+    { key: "love", title: { en: "With love", gu: "સ્નેહાધીન" },
       names: [
         { en: "Mr. Name Surname", gu: "શ્રી નામ અટક" },
         { en: "Mr. Name Surname", gu: "શ્રી નામ અટક" },
         { en: "Mr. Name Surname", gu: "શ્રી નામ અટક" }
       ] }
   ],
+  // ---- Optional: keep the family names in a Google Sheet so you can add names any time, without touching code ----
+  // Sheet columns: group | english | gujarati   (group = hosts, nephews, mosal, love, or any new heading you like)
+  // File > Share > Publish to web > choose the sheet > "Comma-separated values (.csv)" > Publish > paste the link here:
+  namesSheet: "",
   famNote: { en: "Jai Shree Krishna", gu: "જય શ્રી કૃષ્ણ" },   // closing line under the family names (leave "" to hide)
   music: "music.mp3", // optional: put a song named music.mp3 next to index.html
   gods: [ // put these photos in /images (any size). Edit names as you like.
@@ -289,3 +293,38 @@ function applyLang() {
 langBtn.onclick = () => { LANG = LANG === "gu" ? "en" : "gu"; try { localStorage.setItem("lang", LANG); } catch (e) {} applyLang(); };
 document.getElementById("venue-map").href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(CONFIG.venue);
 applyLang();
+
+/* ===== Family names from a Google Sheet (optional, see namesSheet in CONFIG) ===== */
+function parseCSV(t) {
+  const rows = []; let row = [], f = "", q = false;
+  for (let i = 0; i < t.length; i++) {
+    const c = t[i];
+    if (q) { if (c === '"') { if (t[i + 1] === '"') { f += '"'; i++; } else q = false; } else f += c; }
+    else if (c === '"') q = true;
+    else if (c === ",") { row.push(f); f = ""; }
+    else if (c === "\n" || c === "\r") { if (c === "\r" && t[i + 1] === "\n") i++; row.push(f); rows.push(row); row = []; f = ""; }
+    else f += c;
+  }
+  if (f !== "" || row.length) { row.push(f); rows.push(row); }
+  return rows;
+}
+async function loadNames() {
+  if (!CONFIG.namesSheet) return;
+  try {
+    const res = await fetch(CONFIG.namesSheet);
+    const rows = parseCSV(await res.text()).slice(1);
+    const by = {}, raw = {};
+    rows.forEach(r => {
+      const g = (r[0] || "").trim(), en = (r[1] || "").trim(), gu = (r[2] || "").trim();
+      if (!g || !(en || gu)) return;
+      const k = g.toLowerCase();
+      raw[k] = raw[k] || g;
+      (by[k] = by[k] || []).push({ en: en || gu, gu: gu || en });
+    });
+    if (!Object.keys(by).length) return;
+    CONFIG.families.forEach(f => { f.names = by[f.key] || []; delete by[f.key]; });
+    Object.keys(by).forEach(k => CONFIG.families.push({ key: k, title: { en: raw[k], gu: raw[k] }, names: by[k] }));
+    renderDynamic();
+  } catch (e) { /* offline or blocked: the names written in CONFIG stay */ }
+}
+loadNames();

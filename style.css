@@ -2664,8 +2664,6 @@ h1.script {
 }
 /* ===== Background Video ===== */
 
-/* ===== Background Video (Entire Website) ===== */
-/* ===== Background Video ===== */
 .bg-video {
   position: fixed;
   top: 50%;
@@ -2677,4 +2675,10 @@ h1.script {
   opacity: 0.15;
   pointer-events: none;
   z-index: 201;
+}
+/* Targeted fix: remove only the outer square mandap frame behind the ceremony card.
+   Keep the maroon-and-gold arch, background, petals, and all page functionality. */
+.bgphera > rect,
+.bgphera > g:nth-of-type(-n + 2) {
+  display: none !important;
 }

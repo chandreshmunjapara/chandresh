@@ -94,8 +94,10 @@ const CONFIG = {
   music: "music.mp3", // optional: put a song named music.mp3 next to index.html
   bgVideo: "images/bgvideo.mp4", // Put your .mp4 video in the images folder
   gods: [ // put these photos in /images (any size). Edit names as you like.
-    { src: "images/ganesh.jpg", sym: "ॐ", name: "શ્રી ગણેશાય નમઃ" },
-    { src: "images/ambe.jpg", sym: "શ્રી", name: "આઈ શ્રી ખોડીયાર માતાજી" }
+    // { src: "images/ganesh.jpg", sym: "ॐ", name: "શ્રી ગણેશાય નમઃ" },
+    // { src: "images/ambe.jpg", sym: "શ્રી", name: "આઈ શ્રી ખોડીયાર માતાજી" }
+     { src: "images/ganesh.jpg",  },
+    { src: "images/ambe.jpg",  }
   ],
   // ---- Google Form connection (already set up) ----
   form: {

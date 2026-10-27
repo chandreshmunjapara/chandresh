@@ -8,10 +8,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&family=Noto+Serif+Gujarati:wght@500;700&family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=9">
+<link rel="stylesheet" href="style.css?v=12">
 </head>
 <body>
-  <video id="bg-vid" class="bg-video" autoplay loop muted playsinline></video>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
   <pattern id="bd" width="8" height="8" patternUnits="userSpaceOnUse"><rect width="8" height="8" fill="#c41e3a"/><circle cx="4" cy="4" r="1.5" fill="#fff"/></pattern>
   <pattern id="gc" width="14" height="14" patternUnits="userSpaceOnUse"><rect width="14" height="14" fill="#c1121f"/><rect x=".6" y=".6" width="12.8" height="12.8" fill="none" stroke="#f4c542" stroke-width="1"/><circle cx="7" cy="7" r="1.6" fill="#f4c542"/></pattern>
@@ -70,6 +69,7 @@
     <path id="bo" d="M94 102L124 118L154 112"/><path id="bi" d="M46 102L32 126L22 116"/>
   </g>
 </defs></svg>
+<video id="bg-vid" class="bg-video" autoplay loop muted playsinline aria-hidden="true" hidden></video>
 <div id="intro">
   <div>
     <p class="hi">॥ શ્રી ગણેશાય નમઃ ॥</p>
@@ -92,7 +92,6 @@
 
 <!-- 1. HERO -->
 <header id="hero">
-  
   <p class="hi">॥ શ્રી ગણેશાય નમઃ ॥</p>
   <p class="small" data-gu="અમે લગ્નગ્રંથિથી જોડાઈ રહ્યા છીએ">We are getting married</p>
   <h1 class="script" data-gu="ચંદ્રેશ <span>&amp;</span> જાન્વી">Chandresh <span>&amp;</span> Janvi</h1>
@@ -170,23 +169,19 @@
       </g>
     </g>
   </svg>
-   <div class="inside">
-      <!-- This missing line stops the script from crashing: -->
-      <svg class="mandala" id="mandala" viewBox="-100 -100 200 200" aria-hidden="true"></svg>
-      
-      <div class="arch" aria-label="Wedding ceremony invitation">
-        
-        <h2 class="script" data-gu="પરિણય સંસ્કાર">The Wedding Ceremony</h2>
-        <p data-gu="વડીલોના શુભ આશીર્વાદ અને સ્નેહીજનોની શુભેચ્છાઓ સાથે, અમારા કુળદેવી શ્રી ખોડીયાર માતાજીની અસીમ કૃપાથી, અમારા આંગણે આ મંગલ અવસર આવ્યો છે.">With the blessings of our elders and the good wishes of our loved ones, and by the grace of our family goddess Shri Khodiyar Mataji, a joyful occasion has come to our home.</p>
-        <div class="cpl">
-          <div><b class="script" data-gu="ચિ. ચંદ્રેશ">Chandresh</b><em data-gu="શ્રી ધીરુભાઈ મુંજપરા તથા સૌ. રસીલાબેન મુંજપરાના સુપુત્ર">son of Mr. Dhirubhai Munjapara &amp; Mrs. Rasilaben Munjapara</em></div>
-          <i data-gu="ના શુભ લગ્ન">weds</i>
-          <div><b class="script" data-gu="ચિ. જાન્વી">Janvi</b><em data-gu="શ્રી મનુભાઈ દેસાઈ તથા સૌ. નીતાબેન દેસાઈની સુપુત્રી">daughter of Mr. Manubhai Desai &amp; Mrs. Neetaben Desai</em></div>
-        </div>
-        <p class="when" data-gu="મંગળવાર, ૦૨ ફેબ્રુઆરી ૨૦૨૭ · સવારે ૧૧:૦૦ કલાકે<br>કુંકાવાવ">Tuesday, 02 February 2027 · 11:00 AM<br>Kunkavav</p>
-        <p data-gu="આ મંગલ અવસરે આપ સૌ પરિવાર સહિત પધારી નવદંપતીને આશીર્વાદ આપશો, એવી ભાવભરી વિનંતી.">We warmly request you and your family to grace this auspicious occasion and bless the couple.</p>
-        <p class="sig" data-gu="મુંજપરા પરિવાર તથા દેસાઈ પરિવારનું ભાવભર્યું આમંત્રણ">With warm regards, the Munjapara and Desai families</p>
-      </div>
+    <div class="inside">
+      <div class="arch">
+    <h2 class="script" data-gu="પરિણય સંસ્કાર">The Wedding Ceremony</h2>
+    <p data-gu="વડીલોના શુભ આશીર્વાદ અને સ્નેહીજનોની શુભેચ્છાઓ સાથે, અમારા કુળદેવી શ્રી ખોડીયાર માતાજીની અસીમ કૃપાથી, અમારા આંગણે આ મંગલ અવસર આવ્યો છે.">With the blessings of our elders and the good wishes of our loved ones, and by the grace of our family goddess Shri Khodiyar Mataji, a joyful occasion has come to our home.</p>
+    <div class="cpl">
+      <div><b class="script" data-gu="ચિ. ચંદ્રેશ">Chandresh</b><em data-gu="શ્રી ધીરુભાઈ મુંજપરા તથા સૌ. રસીલાબેન મુંજપરાના સુપુત્ર">son of Mr. Dhirubhai Munjapara &amp; Mrs. Rasilaben Munjapara</em></div>
+      <i data-gu="ના શુભ લગ્ન">weds</i>
+      <div><b class="script" data-gu="ચિ. જાન્વી">Janvi</b><em data-gu="શ્રી મનુભાઈ દેસાઈ તથા સૌ. નીતાબેન દેસાઈની સુપુત્રી">daughter of Mr. Manubhai Desai &amp; Mrs. Neetaben Desai</em></div>
+    </div>
+    <p class="when" data-gu="મંગળવાર, ૦૨ ફેબ્રુઆરી ૨૦૨૭<br>સવારે ૧૧:૦૦ કલાકે · કુંકાવાવ">Tuesday, 02 February 2027<br>11:00 AM · Kunkavav</p>
+    <p data-gu="આ મંગલ અવસરે આપ સૌ પરિવાર સહિત પધારી નવદંપતીને આશીર્વાદ આપશો, એવી ભાવભરી વિનંતી.">We warmly request you and your family to grace this auspicious occasion and bless the couple.</p>
+    <p class="sig" data-gu="મુંજપરા પરિવાર તથા દેસાઈ પરિવારનું ભાવભર્યું આમંત્રણ">With warm regards, the Munjapara and Desai families</p>
+  </div>
     </div>
     <div class="door left"><div class="deity" data-g="0"><span></span><small class="hi"></small></div></div>
     <div class="door right"><div class="deity" data-g="1"><span></span><small class="hi"></small></div></div>
@@ -207,23 +202,6 @@
     </svg>
   </div>
 </section>
-
-<!-- 2b. THE WEDDING CARD (like the printed invitation) -->
-<!-- <section id="card">
-  <div class="arch reveal">
-    <p class="gods hi"><span>॥ શ્રી ગણેશાય નમઃ ॥</span><span>॥ શ્રી ખોડીયાર માતાજી ॥</span></p>
-    <h2 class="script" data-gu="પરિણય સંસ્કાર">The Wedding Ceremony</h2>
-    <p data-gu="વડીલોના શુભ આશીર્વાદ અને સ્નેહીજનોની શુભેચ્છાઓ સાથે, અમારા કુળદેવી શ્રી ખોડીયાર માતાજીની અસીમ કૃપાથી, અમારા આંગણે આ મંગલ અવસર આવ્યો છે.">With the blessings of our elders and the good wishes of our loved ones, and by the grace of our family goddess Shri Khodiyar Mataji, a joyful occasion has come to our home.</p>
-    <div class="cpl">
-      <div><b class="script" data-gu="ચિ. ચંદ્રેશ">Chandresh</b><em data-gu="શ્રી ધીરુભાઈ મુંજપરા તથા સૌ. રસીલાબેન મુંજપરાના સુપુત્ર">son of Mr. Dhirubhai Munjapara &amp; Mrs. Rasilaben Munjapara</em></div>
-      <i data-gu="ના શુભ લગ્ન">weds</i>
-      <div><b class="script" data-gu="ચિ. જાન્વી">Janvi</b><em data-gu="શ્રી મનુભાઈ દેસાઈ તથા સૌ. નીતાબેન દેસાઈની સુપુત્રી">daughter of Mr. Manubhai Desai &amp; Mrs. Neetaben Desai</em></div>
-    </div>
-    <p class="when" data-gu="મંગળવાર, ૦૨ ફેબ્રુઆરી ૨૦૨૭ · સવારે ૧૧:૦૦ કલાકે<br>કુંકાવાવ">Tuesday, 02 February 2027 · 11:00 AM<br>Kunkavav</p>
-    <p data-gu="આ મંગલ અવસરે આપ સૌ પરિવાર સહિત પધારી નવદંપતીને આશીર્વાદ આપશો, એવી ભાવભરી વિનંતી.">We warmly request you and your family to grace this auspicious occasion and bless the couple.</p>
-    <p class="sig" data-gu="મુંજપરા પરિવાર તથા દેસાઈ પરિવારનું ભાવભર્યું આમંત્રણ">With warm regards, the Munjapara and Desai families</p>
-  </div>
-</section> -->
 
 <!-- 3. EVENTS -->
 <section id="events">
@@ -338,6 +316,6 @@
   <p class="foot" data-gu="સ્નેહ સહ, ચંદ્રેશ અને જાન્વી તથા પરિવારજનો ❤">With love, Chandresh &amp; Janvi and families ❤</p>
 </section>
 
-<script src="script.js?v=11"></script>
+<script src="script.js?v=12"></script>
 </body>
 </html>

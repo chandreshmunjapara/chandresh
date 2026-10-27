@@ -2776,9 +2776,19 @@ h1.script {
   height: 100vw;
   transform: translate(-50%, -50%) rotate(-90deg);
   object-fit: cover;
-  opacity: .15;
+  opacity: 0;
+  transition: opacity 1.2s;
   pointer-events: none;
   z-index: 30
+}
+
+.bg-video.on {
+  opacity: .15
+}
+
+/* on the opening screen the video sits above it, so it is visible from the very first second; after "Tap to open" it goes back under the toran */
+body:not(.ready) .bg-video {
+  z-index: 201
 }
 
 /* ===== Fixes: overlapping ===== */

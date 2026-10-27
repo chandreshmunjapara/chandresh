@@ -106,6 +106,19 @@ const CONFIG = {
   ]
 };
 
+/* ===== Background video: starts first, before everything else (set bgVideo in CONFIG) ===== */
+const bgVid = document.getElementById("bg-vid");
+if (bgVid && CONFIG.bgVideo && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  bgVid.muted = true; bgVid.loop = true; bgVid.playsInline = true; bgVid.preload = "auto";
+  bgVid.addEventListener("playing", () => bgVid.classList.add("on"));      // fade in as soon as it plays
+  bgVid.addEventListener("error", () => { bgVid.hidden = true; });          // missing file: nothing shows
+  bgVid.src = CONFIG.bgVideo;
+  bgVid.hidden = false;
+  const playVid = () => { const p = bgVid.play(); if (p && p.catch) p.catch(() => { }); };
+  playVid();
+  document.getElementById("open").addEventListener("click", playVid);       // some phones only start video after a tap
+}
+
 /* Language helpers */
 let LANG = CONFIG.defaultLang || "en";
 try { LANG = localStorage.getItem("lang") || LANG; } catch (e) {}
@@ -338,15 +351,3 @@ async function loadNames() {
   } catch (e) { /* offline or blocked: the names written in CONFIG stay */ }
 }
 loadNames();
-
-/* ===== Background video (set bgVideo in CONFIG) ===== */
-const bgVid = document.getElementById("bg-vid");
-if (bgVid && CONFIG.bgVideo && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
-  bgVid.muted = true; bgVid.loop = true; bgVid.playsInline = true;
-  bgVid.addEventListener("error", () => { bgVid.hidden = true; });          // missing file: nothing shows
-  bgVid.src = CONFIG.bgVideo;
-  bgVid.hidden = false;
-  const playVid = () => { const p = bgVid.play(); if (p && p.catch) p.catch(() => { }); };
-  playVid();
-  document.getElementById("open").addEventListener("click", playVid);       // some phones only start video after a tap
-}

@@ -10,15 +10,15 @@ const CONFIG = {
     {
       icon: "🌺", title: { en: "Mandap Muhurat", gu: "મંડપ મુહૂર્ત" },
       date: { en: "Monday<br>01 February 2027", gu: "સોમવાર<br>૦૧ ફેબ્રુઆરી ૨૦૨૭" },
-      time: { en: "9:00 AM", gu: "સવારે ૯:૦૦ કલાકે" },
-      place: { en: "Kunkavav", gu: "કુંકાવાવ" },
-      cal: { start: "20270201T090000", end: "20270201T110000" }
+      time: { en: "8:00 AM", gu: "સવારે ૮:૦૦ કલાકે" },
+      place: { en: "Sanali", gu: "સનાળી" },
+      cal: { start: "20270201T080000", end: "20270201T110000" }
     },
     {
       icon: "🌼", title: { en: "Haldi Rasam", gu: "હલ્દી રસમ" },
       date: { en: "Monday<br>01 February 2027", gu: "સોમવાર<br>૦૧ ફેબ્રુઆરી ૨૦૨૭" },
       time: { en: "4:00 PM", gu: "બપોરે ૪:૦૦ કલાકે" },
-      place: { en: "Kunkavav", gu: "કુંકાવાવ" },
+      place: { en: "Sanali", gu: "સનાળી" },
       cal: { start: "20270201T160000", end: "20270201T183000" }
     },
     {

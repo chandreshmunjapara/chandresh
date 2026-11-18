@@ -5,68 +5,77 @@ const CONFIG = {
   defaultLang: "gu",   // "en" = English first, "gu" = Gujarati first (guests can switch with the button)
   venueText: { en: "Kunkavav, Gujarat", gu: "કુંકાવાવ, ગુજરાત" },
 
-  // ---- Celebrations: one block per event, English + Gujarati. Add or delete blocks freely. ----
+  // ---- Celebrations: one block per event. Add or delete blocks freely. ----
   schedule: [
-    // NOTE: Sangeet (1 Feb, 7 PM, Sanali) and Wedding (2 Feb, 11 AM) are your real details.
-    // The other times below are SAMPLES - please correct them, or delete the blocks you do not need.
-    { icon: "🌺", title: { en: "Mandap Muhurat", gu: "મંડપ મુહૂર્ત" },
+    {
+      icon: "🌺", title: { en: "Mandap Muhurat", gu: "મંડપ મુહૂર્ત" },
       date: { en: "Monday<br>01 February 2027", gu: "સોમવાર<br>૦૧ ફેબ્રુઆરી ૨૦૨૭" },
       time: { en: "9:00 AM", gu: "સવારે ૯:૦૦ કલાકે" },
       place: { en: "Kunkavav", gu: "કુંકાવાવ" },
-      cal: { start: "20270201T090000", end: "20270201T110000" } },
-    { icon: "🌼", title: { en: "Haldi Rasam", gu: "હલ્દી રસમ" },
+      cal: { start: "20270201T090000", end: "20270201T110000" }
+    },
+    {
+      icon: "🌼", title: { en: "Haldi Rasam", gu: "હલ્દી રસમ" },
       date: { en: "Monday<br>01 February 2027", gu: "સોમવાર<br>૦૧ ફેબ્રુઆરી ૨૦૨૭" },
       time: { en: "4:00 PM", gu: "બપોરે ૪:૦૦ કલાકે" },
       place: { en: "Kunkavav", gu: "કુંકાવાવ" },
-      cal: { start: "20270201T160000", end: "20270201T183000" } },
-    { icon: "🎶", title: { en: "Sangeet Sandhya", gu: "સંગીત સંધ્યા" },
+      cal: { start: "20270201T160000", end: "20270201T183000" }
+    },
+    {
+      icon: "🎶", title: { en: "Sangeet Sandhya", gu: "સંગીત સંધ્યા" },
       date: { en: "Monday<br>01 February 2027", gu: "સોમવાર<br>૦૧ ફેબ્રુઆરી ૨૦૨૭" },
       time: { en: "7:00 PM onwards", gu: "સાંજે ૭:૦૦ કલાકથી" },
       place: { en: "Sanali", gu: "સનાળી" },
-      cal: { start: "20270201T190000", end: "20270201T230000", location: "Sanali, Gujarat" } },
-    { icon: "🐎", title: { en: "Jan Aagman (Baraat arrival)", gu: "જાન આગમન" },
+      cal: { start: "20270201T190000", end: "20270201T230000", location: "Sanali, Gujarat" }
+    },
+    {
+      icon: "🐎", title: { en: "Jan Aagman (Baraat arrival)", gu: "જાન આગમન" },
       date: { en: "Tuesday<br>02 February 2027", gu: "મંગળવાર<br>૦૨ ફેબ્રુઆરી ૨૦૨૭" },
       time: { en: "9:30 AM", gu: "સવારે ૯:૩૦ કલાકે" },
       place: { en: "Kunkavav", gu: "કુંકાવાવ" },
-      cal: { start: "20270202T093000", end: "20270202T110000" } },
-    { icon: "🔔", title: { en: "Hast Melap (Wedding)", gu: "હસ્ત મેળાપ (શુભ લગ્ન)" },
+      cal: { start: "20270202T093000", end: "20270202T110000" }
+    },
+    {
+      icon: "🔔", title: { en: "Hast Melap (Wedding)", gu: "હસ્ત મેળાપ (શુભ લગ્ન)" },
       date: { en: "Tuesday<br>02 February 2027", gu: "મંગળવાર<br>૦૨ ફેબ્રુઆરી ૨૦૨૭" },
       time: { en: "11:00 AM", gu: "સવારે ૧૧:૦૦ કલાકે" },
       place: { en: "Kunkavav", gu: "કુંકાવાવ" },
-      cal: { start: "20270202T110000", end: "20270202T130000" } },
-    { icon: "🍽️", title: { en: "Bhojan Samarambh (Lunch)", gu: "ભોજન સમારંભ" },
+      cal: { start: "20270202T110000", end: "20270202T130000" }
+    },
+    {
+      icon: "🍽️", title: { en: "Bhojan Samarambh (Lunch)", gu: "ભોજન સમારંભ" },
       date: { en: "Tuesday<br>02 February 2027", gu: "મંગળવાર<br>૦૨ ફેબ્રુઆરી ૨૦૨૭" },
       time: { en: "1:00 PM", gu: "બપોરે ૧:૦૦ કલાકે" },
       place: { en: "Kunkavav", gu: "કુંકાવાવ" },
-      cal: { start: "20270202T130000", end: "20270202T160000" } }
+      cal: { start: "20270202T130000", end: "20270202T160000" }
+    }
   ],
 
-  // ---- Family names (like "Sneh Bandhan" on the printed card). A group shows only if it has names. ----
-    families: [
-    { key: "hosts", title: { en: "Hosts of the occasion", gu: "અવસરના અભિલાષી" },
+  // ---- Bonds of Love: hosts + Tahuko. A group shows only if it has lines. ----
+  families: [
+    {
+      key: "hosts", title: { en: "Hosts of the occasion", gu: "અવસરના અભિલાષી" },
       names: [
         { en: "Mr. Dhirubhai Munjapara & Mrs. Rasilaben Munjapara", gu: "શ્રી ધીરુભાઈ મુંજપરા તથા સૌ. રસીલાબેન મુંજપરા" },
         { en: "Mr. Manubhai Desai & Mrs. Neetaben Desai", gu: "શ્રી મનુભાઈ દેસાઈ તથા સૌ. નીતાબેન દેસાઈ" }
-      ] },
-    { key: "tahuko", title: { en: "A Little Note from Us", gu: "ટહુકો" },
+      ]
+    },
+    {
+      key: "tahuko", title: { en: "A Little Note from Us", gu: "ટહુકો" },
       names: [
         { en: "After endless dates and a million texts,", gu: "મીઠી યાદો ને મસ્તીનો સંગાથ લાવ્યા છીએ," },
-        { en: "We’ve finally decided what comes next!", gu: "મીઠી યાદો ને મસ્તીનો સંગાથ લાવ્યા છીએ," },
+        { en: "We’ve finally decided what comes next!", gu: "હવે જિંદગીનો નવો અધ્યાય લખવા જઈ રહ્યા છીએ!" },
         { en: "We’re getting married, so clear your schedule right away,", gu: "ઢોલ-નગારા ને ગરબાની રમઝટ જામશે ખાસ," },
         { en: "Come eat, drink, and celebrate our biggest day!", gu: "અમારા લગ્નમાં આવજો લઈને પ્રેમનો ઉલ્લાસ!" }
-      ] }
+      ]
+    }
   ],
-  // ---- Optional: keep the family names in a Google Sheet so you can add names any time, without touching code ----
-  // Sheet columns: group | english | gujarati   (group = hosts, nephews, mosal, love, or any new heading you like)
-  // File > Share > Publish to web > choose the sheet > "Comma-separated values (.csv)" > Publish > paste the link here:
-  namesSheet: "",
-  famNote: { en: "Jai Shree Krishna", gu: "જય શ્રી કૃષ્ણ" },   // closing line under the family names (leave "" to hide)
-  music: "music.mp3", // optional: put a song named music.mp3 next to index.html
-  gods: [ // photos on the gate doors (put them in /images). To show a name under a photo add  name: "..."
+  famNote: { en: "Jai Shree Krishna", gu: "જય શ્રી કૃષ્ણ" },   // closing line under the family names ("" to hide)
+  music: "music.mp3",
+  gods: [ // photos on the gate doors (in /images). To show a name under a photo add  name: "..."
     { src: "images/ganesh.jpg" },
     { src: "images/ambe.jpg" }
   ],
-  // ---- Google Form connection (already set up) ----
   form: {
     action: "https://docs.google.com/forms/d/e/1FAIpQLScBoiDj-FOqhCbqGb1vhIdwhlRYBPO6x1Nan4defZlh1NCtHQ/formResponse",
     fields: {
@@ -75,51 +84,42 @@ const CONFIG = {
       query: "entry.2606285"
     }
   },
-  bgVideo: "images/bgvideo.mp4",   // your background video (put the .mp4 in the images folder). "" = no video
+  bgVideo: "images/bgvideo.mp4",   // "" = no video
   weddingDate: "2027-02-02T11:00:00",
-  whatsapp: "919825167545", // country code + number, no + or spaces
-  photos: [ // put your pictures in the /images folder and list them here
-    { src: "images/1.jpeg" },
-    { src: "images/2.jpeg" },
-    { src: "images/3.jpeg" },
-    { src: "images/4.jpeg" },
-    { src: "images/5.jpeg" },
-    { src: "images/6.jpeg" },
-    { src: "images/7.jpeg" },
-    { src: "images/8.jpeg" },
-    { src: "images/9.jpeg" },
-    { src: "images/10.jpeg" },
-    { src: "images/11.jpeg" },
-    { src: "images/12.jpeg" },
-    { src: "images/13.jpeg" },
-    { src: "images/14.jpeg" }
+  whatsapp: "919825167545",        // country code + number, no + or spaces
+  photos: [
+    { src: "images/1.jpeg" }, { src: "images/2.jpeg" }, { src: "images/3.jpeg" },
+    { src: "images/4.jpeg" }, { src: "images/5.jpeg" }, { src: "images/6.jpeg" },
+    { src: "images/7.jpeg" }, { src: "images/8.jpeg" }, { src: "images/9.jpeg" },
+    { src: "images/10.jpeg" }, { src: "images/11.jpeg" }, { src: "images/12.jpeg" },
+    { src: "images/13.jpeg" }, { src: "images/14.jpeg" }
   ]
 };
 
-/* ===== Background video: starts first, before everything else (set bgVideo in CONFIG) ===== */
+/* ===== Background video (plays on phones too) ===== */
 const bgVid = document.getElementById("bg-vid");
 if (bgVid && CONFIG.bgVideo && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
   bgVid.muted = true; bgVid.loop = true; bgVid.playsInline = true; bgVid.preload = "auto";
-  bgVid.addEventListener("playing", () => bgVid.classList.add("on"));      // fade in as soon as it plays
-  bgVid.addEventListener("error", () => { bgVid.hidden = true; });          // missing file: nothing shows
+  bgVid.addEventListener("playing", () => bgVid.classList.add("on"));
+  bgVid.addEventListener("error", () => { bgVid.hidden = true; });
   bgVid.src = CONFIG.bgVideo;
   bgVid.hidden = false;
   const playVid = () => { const p = bgVid.play(); if (p && p.catch) p.catch(() => { }); };
   playVid();
-  document.getElementById("open").addEventListener("click", playVid);       // some phones only start video after a tap
+  document.getElementById("open").addEventListener("click", playVid);
 }
 
-/* Language helpers */
+/* ===== Language helpers ===== */
 let LANG = CONFIG.defaultLang || "en";
-try { LANG = localStorage.getItem("lang") || LANG; } catch (e) {}
+try { LANG = localStorage.getItem("lang") || LANG; } catch (e) { }
 const tr = (en, gu) => (LANG === "gu" ? gu : en);
 const L = o => (LANG === "gu" && o.gu ? o.gu : o.en);
 const GUD = "૦૧૨૩૪૫૬૭૮૯";
 const num = v => (LANG === "gu" ? String(v).replace(/\d/g, d => GUD[d]) : String(v));
 
-/* Falling petals */
+/* ===== Falling petals ===== */
 const petals = document.getElementById("petals");
-for (let i = 0; i < 22; i++) {
+for (let i = 0; i < (innerWidth < 700 ? 8 : 16); i++) {
   const p = document.createElement("div");
   p.className = "petal";
   p.style.left = Math.random() * 100 + "vw";
@@ -131,9 +131,8 @@ for (let i = 0; i < 22; i++) {
 }
 
 /* Petal shower when the gate opens */
-let burst = false;
 function petalBurst() {
-  for (let i = 0; i < 45; i++) {
+  for (let i = 0; i < 18; i++) {
     const e = document.createElement("div");
     e.className = "petal";
     e.style.left = Math.random() * 100 + "vw";
@@ -145,40 +144,43 @@ function petalBurst() {
     setTimeout(() => e.remove(), 7000);
   }
 }
-/* Gate opens with scroll, then the invitation text slides up so it can all be read */
-const gate = document.getElementById("gate"), stage = gate.querySelector(".stage"), inside = stage.querySelector(".inside");
-let openDist = innerHeight * 1.35, readDist = 0;
-function layoutGate() {
-  openDist = innerHeight * 1.35;
-  readDist = Math.max(0, inside.offsetHeight - stage.clientHeight + 16);
-  gate.style.height = stage.clientHeight + openDist + readDist + innerHeight * 0.25 + "px";
-  onScroll();
-}
-function onScroll() {
-  const y = scrollY - gate.offsetTop;
-  const p = Math.min(1, Math.max(0, y / openDist));
-  stage.style.setProperty("--p", p);
-  stage.style.setProperty("--ty", -Math.min(readDist, Math.max(0, y - openDist)) + "px");
-  if (p > 0.92 && !burst) { burst = true; petalBurst(); } else if (p < 0.5) burst = false;
-  stage.style.setProperty("--s", 0.8 + p * 0.2);
-  stage.style.setProperty("--fo", Math.max(0, 1 - Math.max(0, p - 0.75) * 4));
-  stage.style.setProperty("--o", Math.max(0, (p - 0.25) / 0.75));
-  document.body.classList.toggle("scrolled", scrollY > innerHeight * 0.4);
-  document.documentElement.style.setProperty("--sp2", Math.min(1, scrollY / Math.max(1, document.documentElement.scrollHeight - innerHeight)));
-}
-addEventListener("scroll", onScroll, { passive: true });
-addEventListener("resize", layoutGate);
-addEventListener("load", layoutGate);
-if (document.fonts && document.fonts.ready) document.fonts.ready.then(layoutGate);
-layoutGate();
 
-/* Reveal on scroll */
+/* ===== Gate: tap the diya (or the doors) to open ===== */
+const gate = document.getElementById("gate"), stage = gate.querySelector(".stage");
+
+// light scroll handler: toggles one class, once per frame
+let ticking = false, wasScrolled = false;
+addEventListener("scroll", () => {
+  if (ticking) return;
+  ticking = true;
+  requestAnimationFrame(() => {
+    ticking = false;
+    const s = scrollY > innerHeight * 0.4;
+    if (s !== wasScrolled) { wasScrolled = s; document.body.classList.toggle("scrolled", s); }
+  });
+}, { passive: true });
+
+function openGate() {
+  if (gate.classList.contains("open")) return;
+  stage.scrollIntoView({ behavior: "smooth", block: "start" });
+  gate.classList.add("open");
+  petalBurst();
+  setTimeout(() => gate.classList.add("done"), 2400);
+}
+document.getElementById("diya").addEventListener("click", openGate);
+stage.querySelectorAll(".door").forEach(d => d.addEventListener("click", openGate));
+
+const heroScroll = document.querySelector("#hero .scroll");
+heroScroll.style.cursor = "pointer";
+heroScroll.addEventListener("click", () => gate.scrollIntoView({ behavior: "smooth" }));
+
+/* ===== Reveal on scroll ===== */
 const io = new IntersectionObserver(es => es.forEach(e => {
   if (e.isIntersecting) { setTimeout(() => e.target.classList.add("show"), [...document.querySelectorAll(".reveal")].indexOf(e.target) % 3 * 150); io.unobserve(e.target); }
 }), { threshold: .2 });
 document.querySelectorAll(".reveal").forEach(el => io.observe(el));
 
-/* Toran: photos hanging across the whole page */
+/* ===== Toran: photos hanging across the page ===== */
 const colors = ["#b3202f,#d9a441", "#5a0f1c,#ff8fa3", "#d9a441,#7a1626", "#7a1626,#fff4dc"];
 const track = document.getElementById("track"), lb = document.getElementById("lb");
 const n = CONFIG.photos.length;
@@ -196,7 +198,7 @@ track.addEventListener("click", e => {
 });
 lb.onclick = () => lb.classList.remove("on");
 
-/* Countdown */
+/* ===== Countdown ===== */
 const count = document.getElementById("count");
 const CD = { en: ["Days", "Hours", "Minutes", "Seconds"], gu: ["દિવસ", "કલાક", "મિનિટ", "સેકન્ડ"] };
 setInterval(() => {
@@ -204,14 +206,11 @@ setInterval(() => {
   count.innerHTML = [864e5, 36e5, 6e4, 1e3].map((ms, i) => { const n = Math.floor(t / ms); t -= n * ms; return `<div><b>${num(n)}</b>${CD[LANG][i]}</div>`; }).join("");
 }, 1000);
 
-/* RSVP link */
-
-
-/* Gods on the gate: photo only (tries .jpg, .jpeg, .png, .webp automatically) */
+/* ===== Gods on the gate: photo only (tries .jpg, .jpeg, .png, .webp) ===== */
 CONFIG.gods.forEach((g, i) => {
   const d = document.querySelector(`.deity[data-g="${i}"]`);
   if (!d) return;
-  const w = document.createElement("div");   // frame + name below it
+  const w = document.createElement("div");
   w.className = "dwrap";
   d.replaceWith(w);
   w.append(d);
@@ -232,8 +231,7 @@ CONFIG.gods.forEach((g, i) => {
   })(0);
 });
 
-
-/* Venue + calendar + RSVP */
+/* ===== Venue + RSVP ===== */
 document.querySelectorAll(".dst").forEach(e => e.textContent = CONFIG.venueCity);
 document.getElementById("dir").href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(CONFIG.venue);
 const rsvpForm = document.getElementById("rsvp-form"), rsvpMsg = document.getElementById("rsvp-msg"), sendBtn = document.getElementById("send");
@@ -241,7 +239,6 @@ document.getElementById("wa").href = "https://wa.me/" + CONFIG.whatsapp;
 rsvpForm.addEventListener("submit", async e => {
   e.preventDefault();
   const f = CONFIG.form, el = rsvpForm.elements;
-  if (f.action.includes("YOUR_FORM_ID") || f.fields.name === "entry.0000000000") { rsvpMsg.textContent = "The RSVP form is not connected yet."; return; }
   const d = new FormData();
   d.append(f.fields.name, el.gname.value.trim());
   d.append(f.fields.attend, el.attend.value);
@@ -257,7 +254,7 @@ rsvpForm.addEventListener("submit", async e => {
   sendBtn.disabled = false; sendBtn.innerHTML = LANG === "gu" ? sendBtn.dataset.gu : sendBtn.dataset.en;
 });
 
-/* Opening screen + music */
+/* ===== Opening screen + music ===== */
 history.scrollRestoration = "manual"; scrollTo(0, 0);
 document.body.classList.add("lock");
 const intro = document.getElementById("intro"), snd = document.getElementById("snd");
@@ -268,11 +265,11 @@ document.getElementById("open").onclick = () => {
   document.body.classList.add("ready");
   setTimeout(() => intro.remove(), 1300);
   au = new Audio(CONFIG.music); au.loop = true; au.volume = 0.6;
-  au.play().then(() => { snd.hidden = false; }).catch(() => {});
+  au.play().then(() => { snd.hidden = false; }).catch(() => { });
 };
 snd.onclick = () => { if (au.paused) { au.play(); snd.textContent = "🔊"; } else { au.pause(); snd.textContent = "🔇"; } };
 
-/* ===== Language switch (English / Gujarati), celebrations list, family names ===== */
+/* ===== Language switch, celebrations list, family names ===== */
 const langBtn = document.getElementById("lang");
 const sched = document.getElementById("sched"), famSec = document.getElementById("fam"), famBody = document.getElementById("famBody");
 const calUrl = e => "https://calendar.google.com/calendar/render?action=TEMPLATE&text=" + encodeURIComponent(e.title.en + " - Chandresh & Janvi") + "&dates=" + e.cal.start + "/" + e.cal.end + "&location=" + encodeURIComponent(e.cal.location || CONFIG.venue);
@@ -300,114 +297,8 @@ function applyLang() {
     el.placeholder = LANG === "gu" ? el.dataset.guPh : el.dataset.enPh;
   });
   renderDynamic();
-  layoutGate();
   langBtn.textContent = LANG === "gu" ? "English" : "ગુજરાતી";
 }
-langBtn.onclick = () => { LANG = LANG === "gu" ? "en" : "gu"; try { localStorage.setItem("lang", LANG); } catch (e) {} applyLang(); };
+langBtn.onclick = () => { LANG = LANG === "gu" ? "en" : "gu"; try { localStorage.setItem("lang", LANG); } catch (e) { } applyLang(); };
 document.getElementById("venue-map").href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(CONFIG.venue);
 applyLang();
-
-/* ===== Family names from a Google Sheet (optional, see namesSheet in CONFIG) ===== */
-function parseCSV(t) {
-  const rows = []; let row = [], f = "", q = false;
-  for (let i = 0; i < t.length; i++) {
-    const c = t[i];
-    if (q) { if (c === '"') { if (t[i + 1] === '"') { f += '"'; i++; } else q = false; } else f += c; }
-    else if (c === '"') q = true;
-    else if (c === ",") { row.push(f); f = ""; }
-    else if (c === "\n" || c === "\r") { if (c === "\r" && t[i + 1] === "\n") i++; row.push(f); rows.push(row); row = []; f = ""; }
-    else f += c;
-  }
-  if (f !== "" || row.length) { row.push(f); rows.push(row); }
-  return rows;
-}
-async function loadNames() {
-  if (!CONFIG.namesSheet) return;
-  try {
-    const res = await fetch(CONFIG.namesSheet);
-    const rows = parseCSV(await res.text()).slice(1);
-    const by = {}, raw = {};
-    rows.forEach(r => {
-      const g = (r[0] || "").trim(), en = (r[1] || "").trim(), gu = (r[2] || "").trim();
-      if (!g || !(en || gu)) return;
-      const k = g.toLowerCase();
-      raw[k] = raw[k] || g;
-      (by[k] = by[k] || []).push({ en: en || gu, gu: gu || en });
-    });
-    if (!Object.keys(by).length) return;
-    CONFIG.families.forEach(f => { f.names = by[f.key] || []; delete by[f.key]; });
-    Object.keys(by).forEach(k => CONFIG.families.push({ key: k, title: { en: raw[k], gu: raw[k] }, names: by[k] }));
-    renderDynamic();
-  } catch (e) { /* offline or blocked: the names written in CONFIG stay */ }
-}
-loadNames();
-
-
-/* ===== Auto-open gate: a tiny scroll/swipe opens the whole gate ===== */
-(function () {
-  let auto = false, done = false;
-
-  const ease = t => (t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
-
-  function animateTo(target, dur) {
-    auto = true;
-    const start = scrollY, delta = target - start, t0 = performance.now();
-    document.documentElement.style.scrollBehavior = "auto";   // stop CSS smooth fighting the animation
-    (function step(now) {
-      const k = Math.min(1, (now - t0) / dur);
-      scrollTo(0, start + delta * ease(k));
-      if (k < 1) requestAnimationFrame(step);
-      else { auto = false; done = true; document.documentElement.style.scrollBehavior = ""; }
-    })(t0);
-  }
-
-  function gateOpenTarget() {
-    return gate.offsetTop + openDist;          // scroll position where the gate is fully open
-  }
-
-  function tryAutoOpen() {
-    if (auto || done) return;
-    const y = scrollY - gate.offsetTop;
-    // only when the gate is on screen and still closed
-    if (y > -innerHeight * 0.5 && y < openDist * 0.9) {
-      const target = gateOpenTarget();
-      if (target > scrollY) animateTo(target, 2600);
-    }
-  }
-
-  // Mouse wheel / trackpad: block the manual scroll while auto-opening
-  addEventListener("wheel", e => {
-    if (auto) { e.preventDefault(); return; }
-    if (!done && e.deltaY > 0 && scrollY >= gate.offsetTop - 2 && scrollY - gate.offsetTop < openDist * 0.9) {
-      e.preventDefault();
-      tryAutoOpen();
-    }
-  }, { passive: false });
-
-  // Touch: any small upward swipe inside the gate triggers it
-  let ty = 0;
-  addEventListener("touchstart", e => { ty = e.touches[0].clientY; }, { passive: true });
-  addEventListener("touchmove", e => {
-    if (auto) { e.preventDefault(); return; }
-    const dy = ty - e.touches[0].clientY;                  // positive = swiping up (scrolling down)
-    if (!done && dy > 12 && scrollY >= gate.offsetTop - 2 && scrollY - gate.offsetTop < openDist * 0.9) {
-      e.preventDefault();
-      tryAutoOpen();
-    }
-  }, { passive: false });
-
-  // Keyboard (arrow down, space, page down)
-  addEventListener("keydown", e => {
-    if (["ArrowDown", "PageDown", " "].includes(e.key) &&
-        !done && scrollY >= gate.offsetTop - 2 && scrollY - gate.offsetTop < openDist * 0.9 &&
-        !/INPUT|TEXTAREA/.test(document.activeElement.tagName)) {
-      e.preventDefault();
-      tryAutoOpen();
-    }
-  });
-
-  // If the person scrolls back up above the gate, allow it to auto-open again next time
-  addEventListener("scroll", () => {
-    if (!auto && scrollY < gate.offsetTop - innerHeight * 0.3) done = false;
-  }, { passive: true });
-})();

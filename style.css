@@ -13,7 +13,7 @@
   --tor0: calc(var(--wb)*1.27 + var(--strh) + 44px + var(--sp));
   --tor1: calc(var(--ws)*1.27 + var(--strh) + 44px + var(--sp));
   --dots: radial-gradient(circle, #c4902f2e 1.6px, transparent 2.3px) 0 0/24px 24px, radial-gradient(circle, #ee8fa83a 1.6px, transparent 2.3px) 12px 12px/24px 24px;
-  --garland: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='112' viewBox='0 0 120 112'%3E%3Cpath d='M0 5Q30 15 60 5T120 5' fill='none' stroke='%234f9a7d' stroke-width='3.2' stroke-linecap='round'/%3E%3Cpath d='M30 10V50M90 8V38' stroke='%234f9a7d' stroke-width='1.4'/%3E%3Cg fill='%23fffaf0' stroke='%23e4cf9d' stroke-width='.9'%3E%3Ccircle cx='30' cy='16' r='3.4'/%3E%3Ccircle cx='30' cy='26' r='3.4'/%3E%3Ccircle cx='30' cy='36' r='3.4'/%3E%3Ccircle cx='30' cy='46' r='3.4'/%3E%3Ccircle cx='90' cy='14' r='3.4'/%3E%3Ccircle cx='90' cy='24' r='3.4'/%3E%3Ccircle cx='90' cy='34' r='3.4'/%3E%3C/g%3E%3Cg fill='%235aa886'%3E%3Cellipse cx='24' cy='21' rx='5' ry='2.2' transform='rotate(-30 24 21)'/%3E%3Cellipse cx='36' cy='31' rx='5' ry='2.2' transform='rotate(30 36 31)'/%3E%3Cellipse cx='24' cy='41' rx='5' ry='2.2' transform='rotate(-30 24 41)'/%3E%3Cellipse cx='84' cy='19' rx='5' ry='2.2' transform='rotate(-30 84 19)'/%3E%3Cellipse cx='96' cy='29' rx='5' ry='2.2' transform='rotate(30 96 29)'/%3E%3C/g%3E%3Cpath d='M30 50q-9 8-6 21q6 6 12 0q3-13-6-21z' fill='%23ee8fa8' stroke='%23d6678a' stroke-width='1'/%3E%3Cpath d='M22 56q-8 7-4 17q5 5 10 0q2-10-6-17z' fill='%23f6b2c2' stroke='%23d6678a' stroke-width='.8'/%3E%3Cpath d='M38 56q8 7 4 17q-5 5-10 0q-2-10 6-17z' fill='%23f6b2c2' stroke='%23d6678a' stroke-width='.8'/%3E%3Cpath d='M30 50q-4-2-6-5M30 50q4-2 6-5' stroke='%234f9a7d' stroke-width='1.6' fill='none'/%3E%3Cpath d='M30 74V77' stroke='%23d9a441'/%3E%3Ccircle cx='30' cy='80' r='3.2' fill='%23d9a441'/%3E%3Cpath d='M90 38q-6 6-4 15q4 4 8 0q2-9-4-15z' fill='%23ee8fa8' stroke='%23d6678a' stroke-width='.9'/%3E%3Ccircle cx='90' cy='58' r='2.6' fill='%23d9a441'/%3E%3C/svg%3E");
+  --garland: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='112' viewBox='0 0 120 112'%3E%3Cpath d='M0 9Q30 19 60 9T120 9' fill='none' stroke='%234f9a7d' stroke-width='3.2' stroke-linecap='round'/%3E%3Cpath d='M30 14V50M90 4V38' stroke='%234f9a7d' stroke-width='1.4'/%3E%3Cg fill='%23fffaf0' stroke='%23e4cf9d' stroke-width='.9'%3E%3Ccircle cx='30' cy='16' r='3.4'/%3E%3Ccircle cx='30' cy='26' r='3.4'/%3E%3Ccircle cx='30' cy='36' r='3.4'/%3E%3Ccircle cx='30' cy='46' r='3.4'/%3E%3Ccircle cx='90' cy='14' r='3.4'/%3E%3Ccircle cx='90' cy='24' r='3.4'/%3E%3Ccircle cx='90' cy='34' r='3.4'/%3E%3C/g%3E%3Cg fill='%235aa886'%3E%3Cellipse cx='24' cy='21' rx='5' ry='2.2' transform='rotate(-30 24 21)'/%3E%3Cellipse cx='36' cy='31' rx='5' ry='2.2' transform='rotate(30 36 31)'/%3E%3Cellipse cx='24' cy='41' rx='5' ry='2.2' transform='rotate(-30 24 41)'/%3E%3Cellipse cx='84' cy='19' rx='5' ry='2.2' transform='rotate(-30 84 19)'/%3E%3Cellipse cx='96' cy='29' rx='5' ry='2.2' transform='rotate(30 96 29)'/%3E%3C/g%3E%3Cpath d='M30 50q-9 8-6 21q6 6 12 0q3-13-6-21z' fill='%23ee8fa8' stroke='%23d6678a' stroke-width='1'/%3E%3Cpath d='M22 56q-8 7-4 17q5 5 10 0q2-10-6-17z' fill='%23f6b2c2' stroke='%23d6678a' stroke-width='.8'/%3E%3Cpath d='M38 56q8 7 4 17q-5 5-10 0q-2-10 6-17z' fill='%23f6b2c2' stroke='%23d6678a' stroke-width='.8'/%3E%3Cpath d='M30 50q-4-2-6-5M30 50q4-2 6-5' stroke='%234f9a7d' stroke-width='1.6' fill='none'/%3E%3Cpath d='M30 74V77' stroke='%23d9a441'/%3E%3Ccircle cx='30' cy='80' r='3.2' fill='%23d9a441'/%3E%3Cpath d='M90 38q-6 6-4 15q4 4 8 0q2-9-4-15z' fill='%23ee8fa8' stroke='%23d6678a' stroke-width='.9'/%3E%3Ccircle cx='90' cy='58' r='2.6' fill='%23d9a441'/%3E%3C/svg%3E");
 }
 
 /* ================= BASE ================= */
@@ -43,8 +43,12 @@ body.gu {
   line-height: 1.8
 }
 
+html.lock,
 body.lock {
-  overflow: hidden
+  overflow: hidden;
+  height: 100%;
+  overscroll-behavior: none;
+  touch-action: none;
 }
 
 [hidden] {
@@ -708,7 +712,7 @@ body:not(.ready) #hero * {
   top: calc(var(--tor1) + 3.8rem + (100svh - var(--tor1) - 3.8rem - var(--H) - 3svh - 3rem) * 0.65);
   translate: -50% -50%;
   z-index: 8;
-  width: clamp(78px, 22vw, 104px);
+  width: clamp(96px, 28vw, 128px);
   aspect-ratio: 1;
   padding: 0;
   border: 0;
@@ -1649,6 +1653,7 @@ body.gu #open .seal-txt {
 }
 
 @keyframes sealPulse {
+
   0%,
   100% {
     transform: scale(1);
@@ -1769,4 +1774,35 @@ body {
 
 .bgphera {
   width: min(100%, 860px);
+}
+
+/* ===== Gate: make the diya impossible to miss ===== */
+#diya .dlabel {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  translate: -50% 0;
+  width: max-content;
+  padding: .4rem 1rem;
+  border-radius: 30px;
+  background: linear-gradient(#c1121f, #8f0d18);
+  color: #fff8e8;
+  border: 1.5px solid #f4c542;
+  font: 700 .95rem/1.2 'Lora', 'Noto Serif Gujarati', serif;
+  letter-spacing: .02em;
+  box-shadow: 0 4px 14px #5a0f1c66;
+  animation: dpulse 1.4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes dpulse {
+  50% {
+    transform: scale(1.08);
+    box-shadow: 0 0 0 7px #f4c54244, 0 4px 14px #5a0f1c66
+  }
+}
+
+.hint {
+  font-weight: 700;
+  animation: dpulse 1.8s ease-in-out infinite
 }

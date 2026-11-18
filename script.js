@@ -168,6 +168,10 @@ function openGate() {
   setTimeout(() => gate.classList.add("done"), 2400);
 }
 document.getElementById("diya").addEventListener("click", openGate);
+// scrolling down to the gate also opens it, so nobody can scroll past a closed gate
+new IntersectionObserver(es => {
+  if (es.some(e => e.isIntersecting) && document.body.classList.contains("ready")) openGate();
+}, { threshold: 0.4 }).observe(stage);
 stage.querySelectorAll(".door").forEach(d => d.addEventListener("click", openGate));
 
 const heroScroll = document.querySelector("#hero .scroll");
@@ -258,11 +262,13 @@ rsvpForm.addEventListener("submit", async e => {
 
 /* ===== Opening screen + music ===== */
 history.scrollRestoration = "manual"; scrollTo(0, 0);
+document.documentElement.classList.add("lock");
 document.body.classList.add("lock");
 const intro = document.getElementById("intro"), snd = document.getElementById("snd");
 let au = null;
 document.getElementById("open").onclick = () => {
   intro.classList.add("gone");
+  document.documentElement.classList.remove("lock");
   document.body.classList.remove("lock");
   document.body.classList.add("ready");
   setTimeout(() => intro.remove(), 1300);

@@ -1749,3 +1749,24 @@ body:not(.ready) .bg-video {
   }
 }
 
+/* Prevent horizontal overflow and side-gap on mobile */
+html,
+body {
+  overflow-x: hidden;
+  overscroll-behavior-x: none;
+  max-width: 100%;
+}
+
+.toran,
+#gate,
+#gate.done .stage {
+  overflow-x: hidden;
+}
+
+.inside::before {
+  inset: 6% 0 2%;
+}
+
+.bgphera {
+  width: min(100%, 860px);
+}

@@ -160,19 +160,30 @@ addEventListener("scroll", () => {
   });
 }, { passive: true });
 
-function openGate() {
+function openGate(scroll = true) {
   if (gate.classList.contains("open")) return;
-  stage.scrollIntoView({ behavior: "smooth", block: "start" });
+  if (scroll === true) stage.scrollIntoView({ behavior: "smooth", block: "start" });
   gate.classList.add("open");
   petalBurst();
   setTimeout(() => gate.classList.add("done"), 2400);
 }
-document.getElementById("diya").addEventListener("click", openGate);
-// scrolling down to the gate also opens it, so nobody can scroll past a closed gate
+document.getElementById("diya").addEventListener("click", () => openGate(true));
+stage.querySelectorAll(".door").forEach(d => d.addEventListener("click", () => openGate(true)));
+
+// Tap is the main way to open. Fallback if the guest only scrolls:
+//  - gate fully in view for 3s without a tap -> open it (they have had time to see it)
+//  - guest scrolls past more than half of the closed gate -> open it so it is not skipped
+let autoTimer = null;
 new IntersectionObserver(es => {
-  if (es.some(e => e.isIntersecting) && document.body.classList.contains("ready")) openGate();
-}, { threshold: 0.4 }).observe(stage);
-stage.querySelectorAll(".door").forEach(d => d.addEventListener("click", openGate));
+  const e = es[es.length - 1];
+  if (!document.body.classList.contains("ready") || gate.classList.contains("open")) return;
+  if (e.intersectionRatio >= 0.9) {
+    if (!autoTimer) autoTimer = setTimeout(() => { autoTimer = null; openGate(false); }, 3000);
+  } else {
+    clearTimeout(autoTimer); autoTimer = null;
+    if (e.intersectionRatio < 0.5 && e.boundingClientRect.top < 0) openGate(false);
+  }
+}, { threshold: [0, 0.5, 0.9, 1] }).observe(stage);
 
 const heroScroll = document.querySelector("#hero .scroll");
 if (heroScroll) {

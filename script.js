@@ -171,8 +171,10 @@ document.getElementById("diya").addEventListener("click", openGate);
 stage.querySelectorAll(".door").forEach(d => d.addEventListener("click", openGate));
 
 const heroScroll = document.querySelector("#hero .scroll");
-heroScroll.style.cursor = "pointer";
-heroScroll.addEventListener("click", () => gate.scrollIntoView({ behavior: "smooth" }));
+if (heroScroll) {
+  heroScroll.style.cursor = "pointer";
+  heroScroll.addEventListener("click", () => gate.scrollIntoView({ behavior: "smooth" }));
+}
 
 /* ===== Reveal on scroll ===== */
 const io = new IntersectionObserver(es => es.forEach(e => {

@@ -1578,6 +1578,7 @@ body:not(.ready) #hero * {
   animation: beat 2s infinite
 }
 
+
 #open {
   position: relative;
   width: 132px;
@@ -1597,7 +1598,7 @@ body:not(.ready) #hero * {
   clip-path: polygon(50% 0%, 61% 4%, 71% 2%, 79% 9%, 90% 11%, 94% 21%, 100% 30%, 98% 41%, 100% 50%, 98% 60%, 100% 70%, 94% 79%, 90% 89%, 79% 91%, 71% 98%, 61% 96%, 50% 100%, 39% 96%, 29% 98%, 21% 91%, 10% 89%, 6% 79%, 0% 70%, 2% 60%, 0% 50%, 2% 41%, 0% 30%, 6% 21%, 10% 11%, 21% 9%, 29% 2%, 39% 4%);
   font-family: 'Playfair Display', 'Noto Serif Gujarati', serif;
   animation: sealPulse 2.2s ease-in-out infinite;
-  filter: drop-shadow(0 8px 10px #5a0f1c66)
+  filter: drop-shadow(0 8px 10px #5a0f1c66);
 }
 
 #open::before {
@@ -1607,7 +1608,7 @@ body:not(.ready) #hero * {
   border-radius: 50%;
   border: 2px solid #f4c542;
   box-shadow: inset 0 0 0 3px #9a1626, inset 0 2px 8px #0006, 0 0 0 2px #7a1020;
-  pointer-events: none
+  pointer-events: none;
 }
 
 #open::after {
@@ -1620,7 +1621,7 @@ body:not(.ready) #hero * {
   border-radius: 50%;
   background: linear-gradient(#ffffff55, transparent);
   transform: rotate(-25deg);
-  pointer-events: none
+  pointer-events: none;
 }
 
 #open .seal-heart {
@@ -1628,7 +1629,7 @@ body:not(.ready) #hero * {
   line-height: 1;
   color: #ffd98a;
   text-shadow: 0 2px 3px #5a0f1c, 0 0 12px #ffb30088;
-  animation: beat 1.4s infinite
+  animation: beat 1.4s infinite;
 }
 
 #open .seal-txt {
@@ -1638,26 +1639,25 @@ body:not(.ready) #hero * {
   text-transform: uppercase;
   text-shadow: 0 1px 2px #5a0f1c;
   max-width: 78px;
-  line-height: 1.15
+  line-height: 1.15;
 }
 
 body.gu #open .seal-txt {
   text-transform: none;
   letter-spacing: 0;
-  font-size: .85rem
+  font-size: .85rem;
 }
 
 @keyframes sealPulse {
-
   0%,
   100% {
     transform: scale(1);
-    filter: drop-shadow(0 8px 10px #5a0f1c66)
+    filter: drop-shadow(0 8px 10px #5a0f1c66);
   }
 
   50% {
     transform: scale(1.06);
-    filter: drop-shadow(0 10px 22px #d9a441aa)
+    filter: drop-shadow(0 10px 22px #d9a441aa);
   }
 }
 
@@ -1748,3 +1748,4 @@ body:not(.ready) .bg-video {
     animation: none !important
   }
 }
+

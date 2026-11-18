@@ -2808,3 +2808,98 @@ body:not(.ready) .bg-video {
 .bgphera>g:nth-of-type(-n + 2) {
   display: none !important
 }
+
+/* ===== Romantic wax seal button ===== */
+#open {
+  position: relative;
+  width: 132px;
+  height: 132px;
+  margin-top: 1.8rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .15rem;
+  color: #ffe9a8;
+  cursor: pointer;
+  background:
+    radial-gradient(circle at 32% 28%, #e8465c 0, #b3202f 45%, #7a1020 100%);
+  /* wavy wax edge */
+  clip-path: polygon(50% 0%, 61% 4%, 71% 2%, 79% 9%, 90% 11%, 94% 21%, 100% 30%, 98% 41%, 100% 50%, 98% 60%, 100% 70%, 94% 79%, 90% 89%, 79% 91%, 71% 98%, 61% 96%, 50% 100%, 39% 96%, 29% 98%, 21% 91%, 10% 89%, 6% 79%, 0% 70%, 2% 60%, 0% 50%, 2% 41%, 0% 30%, 6% 21%, 10% 11%, 21% 9%, 29% 2%, 39% 4%);
+  box-shadow: none;
+  animation: sealPulse 2.2s ease-in-out infinite;
+  font-family: 'Playfair Display', 'Noto Serif Gujarati', serif;
+  filter: drop-shadow(0 8px 10px #5a0f1c66);
+}
+
+#open::before {            /* embossed gold ring */
+  content: "";
+  position: absolute;
+  inset: 14px;
+  border-radius: 50%;
+  border: 2px solid #f4c542;
+  box-shadow: inset 0 0 0 3px #9a1626, inset 0 2px 8px #0006, 0 0 0 2px #7a1020;
+  pointer-events: none;
+}
+
+#open::after {             /* glossy highlight */
+  content: "";
+  position: absolute;
+  top: 10%;
+  left: 18%;
+  width: 38%;
+  height: 22%;
+  border-radius: 50%;
+  background: linear-gradient(#ffffff55, transparent);
+  transform: rotate(-25deg);
+  pointer-events: none;
+}
+
+#open .seal-heart {
+  font-size: 2rem;
+  line-height: 1;
+  color: #ffd98a;
+  text-shadow: 0 2px 3px #5a0f1c, 0 0 12px #ffb30088;
+  animation: beat 1.4s infinite;
+}
+
+#open .seal-txt {
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 2px #5a0f1c;
+  max-width: 78px;
+  line-height: 1.15;
+}
+
+body.gu #open .seal-txt { text-transform: none; letter-spacing: 0; font-size: .85rem; }
+
+#open:active { transform: scale(.94); }
+
+@keyframes sealPulse {
+  0%, 100% { transform: scale(1);    filter: drop-shadow(0 8px 10px #5a0f1c66); }
+  50%      { transform: scale(1.06); filter: drop-shadow(0 10px 22px #d9a441aa); }
+}
+
+/* ===== Bonds of Love: hosts on top, Tahuko below, one column ===== */
+.fgrid {
+  column-count: 1;
+  column-rule: 0;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.fg-tahuko {
+  margin-top: 2.2rem;
+  margin-bottom: 0;
+}
+
+.fg-tahuko p {
+  font-style: italic;
+  line-height: 1.7;
+  margin: .15rem 0;
+}

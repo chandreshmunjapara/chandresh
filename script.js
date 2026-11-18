@@ -2,7 +2,7 @@
 const CONFIG = {
   venue: "Kunkavav, Gujarat",
   venueCity: "Kunkavav",
-  defaultLang: "en",   // "en" = English first, "gu" = Gujarati first (guests can switch with the button)
+  defaultLang: "gu",   // "en" = English first, "gu" = Gujarati first (guests can switch with the button)
   venueText: { en: "Kunkavav, Gujarat", gu: "કુંકાવાવ, ગુજરાત" },
 
   // ---- Celebrations: one block per event, English + Gujarati. Add or delete blocks freely. ----
@@ -42,28 +42,18 @@ const CONFIG = {
   ],
 
   // ---- Family names (like "Sneh Bandhan" on the printed card). A group shows only if it has names. ----
-  families: [
+    families: [
     { key: "hosts", title: { en: "Hosts of the occasion", gu: "અવસરના અભિલાષી" },
       names: [
         { en: "Mr. Dhirubhai Munjapara & Mrs. Rasilaben Munjapara", gu: "શ્રી ધીરુભાઈ મુંજપરા તથા સૌ. રસીલાબેન મુંજપરા" },
         { en: "Mr. Manubhai Desai & Mrs. Neetaben Desai", gu: "શ્રી મનુભાઈ દેસાઈ તથા સૌ. નીતાબેન દેસાઈ" }
       ] },
-    // SAMPLE names below - replace "Name Surname" / "નામ અટક" with real names, add more lines, or delete a group.
-    { key: "nephews", title: { en: "Dear nephews", gu: "વ્હાલા ભાણેજો" },
+    { key: "tahuko", title: { en: "A Little Note from Us", gu: "ટહુકો" },
       names: [
-        { en: "Mr. Name Surname - Town", gu: "શ્રી નામ અટક - ગામ" },
-        { en: "Mr. Name Surname - Town", gu: "શ્રી નામ અટક - ગામ" }
-      ] },
-    { key: "mosal", title: { en: "Maternal family (Mosal)", gu: "મોસાળ પક્ષ" },
-      names: [
-        { en: "Mr. Name Surname", gu: "શ્રી નામ અટક" },
-        { en: "Mr. Name Surname", gu: "શ્રી નામ અટક" }
-      ] },
-    { key: "love", title: { en: "With love", gu: "સ્નેહાધીન" },
-      names: [
-        { en: "Mr. Name Surname", gu: "શ્રી નામ અટક" },
-        { en: "Mr. Name Surname", gu: "શ્રી નામ અટક" },
-        { en: "Mr. Name Surname", gu: "શ્રી નામ અટક" }
+        { en: "After endless dates and a million texts,", gu: "મીઠી યાદો ને મસ્તીનો સંગાથ લાવ્યા છીએ," },
+        { en: "We’ve finally decided what comes next!", gu: "મીઠી યાદો ને મસ્તીનો સંગાથ લાવ્યા છીએ," },
+        { en: "We’re getting married, so clear your schedule right away,", gu: "ઢોલ-નગારા ને ગરબાની રમઝટ જામશે ખાસ," },
+        { en: "Come eat, drink, and celebrate our biggest day!", gu: "અમારા લગ્નમાં આવજો લઈને પ્રેમનો ઉલ્લાસ!" }
       ] }
   ],
   // ---- Optional: keep the family names in a Google Sheet so you can add names any time, without touching code ----
@@ -296,7 +286,7 @@ function renderDynamic() {
   famSec.hidden = !groups.length;
   const fn = document.getElementById("famNote"), note = CONFIG.famNote ? L(CONFIG.famNote) : "";
   fn.textContent = note; fn.hidden = !note;
-  famBody.innerHTML = groups.map(g => `<div class="fg"><h3>${L(g.title)}</h3>${g.names.map(n => `<p>${L(n)}</p>`).join("")}</div>`).join("");
+  famBody.innerHTML = groups.map(g => `<div class="fg fg-${g.key}"><h3>${L(g.title)}</h3>${g.names.map(n => `<p>${L(n)}</p>`).join("")}</div>`).join("");
 }
 function applyLang() {
   document.documentElement.lang = LANG === "gu" ? "gu" : "en";
@@ -351,3 +341,73 @@ async function loadNames() {
   } catch (e) { /* offline or blocked: the names written in CONFIG stay */ }
 }
 loadNames();
+
+
+/* ===== Auto-open gate: a tiny scroll/swipe opens the whole gate ===== */
+(function () {
+  let auto = false, done = false;
+
+  const ease = t => (t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
+
+  function animateTo(target, dur) {
+    auto = true;
+    const start = scrollY, delta = target - start, t0 = performance.now();
+    document.documentElement.style.scrollBehavior = "auto";   // stop CSS smooth fighting the animation
+    (function step(now) {
+      const k = Math.min(1, (now - t0) / dur);
+      scrollTo(0, start + delta * ease(k));
+      if (k < 1) requestAnimationFrame(step);
+      else { auto = false; done = true; document.documentElement.style.scrollBehavior = ""; }
+    })(t0);
+  }
+
+  function gateOpenTarget() {
+    return gate.offsetTop + openDist;          // scroll position where the gate is fully open
+  }
+
+  function tryAutoOpen() {
+    if (auto || done) return;
+    const y = scrollY - gate.offsetTop;
+    // only when the gate is on screen and still closed
+    if (y > -innerHeight * 0.5 && y < openDist * 0.9) {
+      const target = gateOpenTarget();
+      if (target > scrollY) animateTo(target, 2600);
+    }
+  }
+
+  // Mouse wheel / trackpad: block the manual scroll while auto-opening
+  addEventListener("wheel", e => {
+    if (auto) { e.preventDefault(); return; }
+    if (!done && e.deltaY > 0 && scrollY >= gate.offsetTop - 2 && scrollY - gate.offsetTop < openDist * 0.9) {
+      e.preventDefault();
+      tryAutoOpen();
+    }
+  }, { passive: false });
+
+  // Touch: any small upward swipe inside the gate triggers it
+  let ty = 0;
+  addEventListener("touchstart", e => { ty = e.touches[0].clientY; }, { passive: true });
+  addEventListener("touchmove", e => {
+    if (auto) { e.preventDefault(); return; }
+    const dy = ty - e.touches[0].clientY;                  // positive = swiping up (scrolling down)
+    if (!done && dy > 12 && scrollY >= gate.offsetTop - 2 && scrollY - gate.offsetTop < openDist * 0.9) {
+      e.preventDefault();
+      tryAutoOpen();
+    }
+  }, { passive: false });
+
+  // Keyboard (arrow down, space, page down)
+  addEventListener("keydown", e => {
+    if (["ArrowDown", "PageDown", " "].includes(e.key) &&
+        !done && scrollY >= gate.offsetTop - 2 && scrollY - gate.offsetTop < openDist * 0.9 &&
+        !/INPUT|TEXTAREA/.test(document.activeElement.tagName)) {
+      e.preventDefault();
+      tryAutoOpen();
+    }
+  });
+
+  // If the person scrolls back up above the gate, allow it to auto-open again next time
+  addEventListener("scroll", () => {
+    if (!auto && scrollY < gate.offsetTop - innerHeight * 0.3) done = false;
+  }, { passive: true });
+})();

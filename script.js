@@ -96,7 +96,7 @@ const CONFIG = {
   ]
 };
 
-/* ===== Background video (plays on phones too) ===== */
+/* ===== Background video: starts at page load, plays on every page ===== */
 const bgVid = document.getElementById("bg-vid");
 if (bgVid && CONFIG.bgVideo && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
   bgVid.muted = true; bgVid.loop = true; bgVid.playsInline = true; bgVid.preload = "auto";
@@ -104,8 +104,9 @@ if (bgVid && CONFIG.bgVideo && !matchMedia("(prefers-reduced-motion: reduce)").m
   bgVid.addEventListener("error", () => { bgVid.hidden = true; });
   bgVid.src = CONFIG.bgVideo;
   bgVid.hidden = false;
-  const playVid = () => { const p = bgVid.play(); if (p && p.catch) p.catch(() => { }); };
+  const playVid = () => { if (bgVid.paused) bgVid.play().catch(() => { }); };
   playVid();
+  document.addEventListener("touchstart", playVid, { once: true, passive: true });
   document.getElementById("open").addEventListener("click", playVid);
 }
 
@@ -219,10 +220,10 @@ lb.onclick = () => lb.classList.remove("on");
 const count = document.getElementById("count");
 const CD = { en: ["Days", "Hours", "Minutes", "Seconds"], gu: ["દિવસ", "કલાક", "મિનિટ", "સેકન્ડ"] };
 setInterval(() => {
+  if (document.body.classList.contains("scrolling") || document.hidden) return;   // <-- added line
   let t = Math.max(0, new Date(CONFIG.weddingDate) - new Date());
   count.innerHTML = [864e5, 36e5, 6e4, 1e3].map((ms, i) => { const n = Math.floor(t / ms); t -= n * ms; return `<div><b>${num(n)}</b>${CD[LANG][i]}</div>`; }).join("");
 }, 1000);
-
 /* ===== Gods on the gate: photo only (tries .jpg, .jpeg, .png, .webp) ===== */
 CONFIG.gods.forEach((g, i) => {
   const d = document.querySelector(`.deity[data-g="${i}"]`);
@@ -237,8 +238,7 @@ CONFIG.gods.forEach((g, i) => {
     nm.textContent = g.name;
     w.append(nm);
   }
-  const base = g.src.replace(/\.\w+$/, "");
-  const tries = ["jpg", "jpeg", "png", "webp", "JPG", "JPEG", "PNG"].map(e => base + "." + e);
+  const tries = [g.src];
   (function next(k) {
     if (k >= tries.length) return;
     const im = new Image();
@@ -272,22 +272,57 @@ rsvpForm.addEventListener("submit", async e => {
 });
 
 /* ===== Opening screen + music ===== */
+/* ===== Opening screen + music ===== */
 history.scrollRestoration = "manual"; scrollTo(0, 0);
 document.documentElement.classList.add("lock");
 document.body.classList.add("lock");
 const intro = document.getElementById("intro"), snd = document.getElementById("snd");
-let au = null;
+
+const au = new Audio();
+au.src = CONFIG.music; au.loop = true; au.volume = 0.6; au.preload = "auto";
+let started = false, userPaused = false, pausedByHide = false;
+
+const setIcon = () => { snd.textContent = au.paused ? "🔇" : "🔊"; };
+function playMusic() {
+  const p = au.play();
+  if (p && p.then) p.then(setIcon).catch(setIcon); else setIcon();
+}
+
 document.getElementById("open").onclick = () => {
   intro.classList.add("gone");
   document.documentElement.classList.remove("lock");
   document.body.classList.remove("lock");
   document.body.classList.add("ready");
   setTimeout(() => intro.remove(), 1300);
-  au = new Audio(CONFIG.music); au.loop = true; au.volume = 0.6;
-  au.play().then(() => { snd.hidden = false; }).catch(() => { });
+  started = true;
+  snd.hidden = false;
+  playMusic();
 };
-snd.onclick = () => { if (au.paused) { au.play(); snd.textContent = "🔊"; } else { au.pause(); snd.textContent = "🔇"; } };
 
+["touchend", "click"].forEach(ev =>
+  document.addEventListener(ev, e => {
+    if (e.target.closest && e.target.closest("#snd")) return;
+    if (started && !userPaused && au.paused && !document.hidden) playMusic();
+  }, { passive: true }));
+
+snd.onclick = () => {
+  if (au.paused) { userPaused = false; playMusic(); }
+  else { userPaused = true; au.pause(); setIcon(); }
+};
+
+function pauseAll() {
+  if (!au.paused) pausedByHide = true;
+  au.pause(); setIcon();
+  if (bgVid) bgVid.pause();
+}
+function resumeAll() {
+  if (pausedByHide && !userPaused) playMusic();
+  pausedByHide = false;
+  if (bgVid && bgVid.getAttribute("src") && !bgVid.hidden) bgVid.play().catch(() => { });
+}
+document.addEventListener("visibilitychange", () => document.hidden ? pauseAll() : resumeAll());
+addEventListener("pagehide", pauseAll);
+addEventListener("pageshow", e => { if (e.persisted) resumeAll(); });
 /* ===== Language switch, celebrations list, family names ===== */
 const langBtn = document.getElementById("lang");
 const sched = document.getElementById("sched"), famSec = document.getElementById("fam"), famBody = document.getElementById("famBody");
@@ -321,3 +356,29 @@ function applyLang() {
 langBtn.onclick = () => { LANG = LANG === "gu" ? "en" : "gu"; try { localStorage.setItem("lang", LANG); } catch (e) { } applyLang(); };
 document.getElementById("venue-map").href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(CONFIG.venue);
 applyLang();
+
+/* ===== Smoothness: pause heavy animations when off-screen or while scrolling ===== */
+let scrollTimer, isScrolling = false;
+const visible = new Set();
+const laneSvgs = [...document.querySelectorAll(".lane svg")];
+function syncSmil() {
+  laneSvgs.forEach(s => {
+    const run = visible.has(s.closest(".lane")) && !isScrolling;
+    run ? s.unpauseAnimations() : s.pauseAnimations();
+  });
+}
+const animIO = new IntersectionObserver(es => {
+  es.forEach(e => {
+    e.target.classList.toggle("paused", !e.isIntersecting);
+    e.isIntersecting ? visible.add(e.target) : visible.delete(e.target);
+  });
+  syncSmil();
+}, { rootMargin: "120px" });
+document.querySelectorAll("#hero, .bgphera, .lane").forEach(el => animIO.observe(el));
+addEventListener("scroll", () => {
+  if (!isScrolling) { isScrolling = true; document.body.classList.add("scrolling"); syncSmil(); }
+  clearTimeout(scrollTimer);
+  scrollTimer = setTimeout(() => {
+    isScrolling = false; document.body.classList.remove("scrolling"); syncSmil();
+  }, 160);
+}, { passive: true });

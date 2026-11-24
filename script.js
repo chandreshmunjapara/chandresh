@@ -85,6 +85,7 @@ const CONFIG = {
     }
   },
   bgVideo: "images/bgvideo.mp4",   // "" = no video
+  planeBanner: "images/banner.jpeg", // banner photo attached to the paper plane
   weddingDate: "2027-02-02T11:00:00",
   whatsapp: "919825167545",        // country code + number, no + or spaces
   photos: [
@@ -220,11 +221,12 @@ lb.onclick = () => lb.classList.remove("on");
 const count = document.getElementById("count");
 const CD = { en: ["Days", "Hours", "Minutes", "Seconds"], gu: ["દિવસ", "કલાક", "મિનિટ", "સેકન્ડ"] };
 setInterval(() => {
-  if (document.body.classList.contains("scrolling") || document.hidden) return;   // <-- added line
+  if (document.body.classList.contains("scrolling") || document.hidden) return;
   let t = Math.max(0, new Date(CONFIG.weddingDate) - new Date());
   count.innerHTML = [864e5, 36e5, 6e4, 1e3].map((ms, i) => { const n = Math.floor(t / ms); t -= n * ms; return `<div><b>${num(n)}</b>${CD[LANG][i]}</div>`; }).join("");
 }, 1000);
-/* ===== Gods on the gate: photo only (tries .jpg, .jpeg, .png, .webp) ===== */
+
+/* ===== Gods on the gate: photo only ===== */
 CONFIG.gods.forEach((g, i) => {
   const d = document.querySelector(`.deity[data-g="${i}"]`);
   if (!d) return;
@@ -271,8 +273,7 @@ rsvpForm.addEventListener("submit", async e => {
   sendBtn.disabled = false; sendBtn.innerHTML = LANG === "gu" ? sendBtn.dataset.gu : sendBtn.dataset.en;
 });
 
-/* ===== Opening screen + music ===== */
-/* ===== Opening screen + music ===== */
+/* ===== Opening screen + letter -> paper plane -> flower blast + music ===== */
 history.scrollRestoration = "manual"; scrollTo(0, 0);
 document.documentElement.classList.add("lock");
 document.body.classList.add("lock");
@@ -288,15 +289,188 @@ function playMusic() {
   if (p && p.then) p.then(setIcon).catch(setIcon); else setIcon();
 }
 
-document.getElementById("open").onclick = () => {
+const openBtn = document.getElementById("open");
+const planeStage = document.getElementById("plane-stage");
+let isOpening = false;
+
+function revealMainPage() {
   intro.classList.add("gone");
   document.documentElement.classList.remove("lock");
   document.body.classList.remove("lock");
   document.body.classList.add("ready");
-  setTimeout(() => intro.remove(), 1300);
+  setTimeout(() => intro.remove(), 1200);
+}
+
+function blastFlowers(x, y) {
+  const isMobile = innerWidth < 700;
+  const count = isMobile ? 28 : 42;
+  const flowers = ["🌸", "🌺", "🌼", "🪷", "🌹", "🏵️", "✨"];
+  const maxR = Math.min(innerWidth, innerHeight) * (isMobile ? 0.44 : 0.38);
+
+  const ring = document.createElement("div");
+  ring.className = "blast-ring";
+  ring.style.left = x + "px";
+  ring.style.top = y + "px";
+  planeStage.appendChild(ring);
+  ring.animate([
+    { transform: "scale(0.5)", opacity: 1 },
+    { transform: "scale(5.5)", opacity: 0 }
+  ], { duration: 520, easing: "cubic-bezier(.15,.85,.35,1)", fill: "forwards" })
+    .onfinish = () => ring.remove();
+
+  for (let i = 0; i < count; i++) {
+    const el = document.createElement("span");
+    el.className = "blast-flw";
+    el.textContent = flowers[i % flowers.length];
+    el.style.fontSize = (isMobile ? 16 : 20) + Math.random() * 14 + "px";
+
+    const angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.45;
+    const dist = 36 + Math.random() * maxR;
+    const tx = Math.cos(angle) * dist;
+    const ty = Math.sin(angle) * dist;
+    const fallY = ty + 70 + Math.random() * 90;
+    const rot = (Math.random() > 0.5 ? 1 : -1) * (120 + Math.random() * 240);
+    const dur = 1150 + Math.random() * 550;
+
+    planeStage.appendChild(el);
+    el.animate([
+      { transform: `translate3d(${x}px, ${y}px, 0) scale(0.2) rotate(0deg)`, opacity: 1 },
+      { transform: `translate3d(${x + tx}px, ${y + ty}px, 0) scale(1.15) rotate(${rot * 0.55}deg)`, opacity: 1, offset: 0.4 },
+      { transform: `translate3d(${x + tx * 1.15}px, ${y + fallY}px, 0) scale(0.75) rotate(${rot}deg)`, opacity: 0 }
+    ], { duration: dur, easing: "cubic-bezier(.16,.84,.44,1)", fill: "forwards" })
+      .onfinish = () => el.remove();
+  }
+}
+
+openBtn.onclick = () => {
+  if (isOpening) return;
+  isOpening = true;
+
+  // Start audio immediately inside user tap (required for mobile browsers)
   started = true;
   snd.hidden = false;
   playMusic();
+
+  // Respect reduced-motion accessibility setting
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    revealMainPage();
+    return;
+  }
+
+  // Step 1: Fold the letter
+  const rect = openBtn.getBoundingClientRect();
+  const startX = rect.left + rect.width / 2;
+  const startY = rect.top + rect.height / 2;
+  openBtn.classList.add("folding");
+
+  // Step 2: Spawn paper plane + attached banner photo
+  setTimeout(() => {
+    const rig = document.createElement("div");
+    rig.className = "plane-rig";
+    rig.style.transformOrigin = "50% 50%";
+
+    const bannerSrc = CONFIG.planeBanner || (CONFIG.photos[0] && CONFIG.photos[0].src) || "";
+    const fallbackSrc = (CONFIG.photos[0] && CONFIG.photos[0].src) || "";
+
+    rig.innerHTML = `
+      <div class="plane-banner">
+        <img src="${bannerSrc}" alt="Wedding banner" onerror="this.onerror=null;if('${fallbackSrc}')this.src='${fallbackSrc}';">
+      </div>
+      <svg class="plane-tether" viewBox="0 0 30 48" aria-hidden="true">
+        <path d="M0 10 Q15 16 30 24 M0 38 Q15 32 30 24" fill="none" stroke="#d9a441" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <svg class="plane-svg" viewBox="0 0 96 64" aria-hidden="true">
+        <polygon points="4,22 94,32 22,40" fill="#fffaf0" stroke="#c9962f" stroke-width="2" stroke-linejoin="round"/>
+        <polygon points="22,40 94,32 32,58" fill="#ebd09a" stroke="#c9962f" stroke-width="2" stroke-linejoin="round"/>
+        <polygon points="22,40 32,58 44,44" fill="#d3a85b" stroke="#b98322" stroke-width="1.5" stroke-linejoin="round"/>
+        <polygon points="4,22 94,32 36,10" fill="#fffdf7" stroke="#c9962f" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M18 28 L76 32" stroke="#b3202f" stroke-width="1.6" stroke-dasharray="4 3" opacity=".75"/>
+      </svg>`;
+
+    planeStage.appendChild(rig);
+
+    const bannerImg = rig.querySelector(".plane-banner img");
+    const rigRect = rig.getBoundingClientRect();
+    const halfW = rigRect.width / 2;
+    const halfH = rigRect.height / 2;
+    const W = innerWidth, H = innerHeight;
+    const padX = Math.min(Math.max(W * 0.14, 52), 130);
+
+    // Full-screen S-loop waypoints: Envelope -> Right turn -> Full left glide -> Left turn -> Upper-center blast
+    const pts = [
+      { x: startX, y: startY },
+      { x: W - padX, y: Math.min(H * 0.68, startY - H * 0.05) },
+      { x: W - padX * 0.72, y: H * 0.45 },
+      { x: W * 0.50, y: H * 0.50 },
+      { x: padX * 0.72, y: H * 0.42 },
+      { x: padX, y: H * 0.24 },
+      { x: W * 0.52, y: H * 0.24 }
+    ];
+
+    // Smooth Catmull-Rom spline sampler
+    function sampleSpline(u) {
+      const segs = pts.length - 1;
+      const scaled = Math.max(0, Math.min(segs - 1e-6, u * segs));
+      const i = Math.floor(scaled);
+      const t = scaled - i;
+      const p0 = pts[Math.max(0, i - 1)];
+      const p1 = pts[i];
+      const p2 = pts[Math.min(segs, i + 1)];
+      const p3 = pts[Math.min(segs, i + 2)];
+      const t2 = t * t, t3 = t2 * t;
+
+      const x = 0.5 * ((2 * p1.x) + (-p0.x + p2.x) * t + (2 * p0.x - 5 * p1.x + 4 * p2.x - p3.x) * t2 + (-p0.x + 3 * p1.x - 3 * p2.x + p3.x) * t3);
+      const y = 0.5 * ((2 * p1.y) + (-p0.y + p2.y) * t + (2 * p0.y - 5 * p1.y + 4 * p2.y - p3.y) * t2 + (-p0.y + 3 * p1.y - 3 * p2.y + p3.y) * t3);
+      const vx = 0.5 * ((-p0.x + p2.x) + 2 * (2 * p0.x - 5 * p1.x + 4 * p2.x - p3.x) * t + 3 * (-p0.x + 3 * p1.x - 3 * p2.x + p3.x) * t2);
+      const vy = 0.5 * ((-p0.y + p2.y) + 2 * (2 * p0.y - 5 * p1.y + 4 * p2.y - p3.y) * t + 3 * (-p0.y + 3 * p1.y - 3 * p2.y + p3.y) * t2);
+      return { x, y, vx, vy };
+    }
+
+    // Step 3: Reveal the second page smoothly right after takeoff
+    setTimeout(revealMainPage, 320);
+
+    const DURATION = 5500;
+    const t0 = performance.now();
+    let mirrored = false;
+
+    function frame(now) {
+      const raw = Math.min(1, (now - t0) / DURATION);
+      // Gentle ease-in at takeoff, steady readable cruise across the screen
+      const u = raw < 0.12 ? (raw * raw) / 0.12 : raw;
+      const { x, y, vx, vy } = sampleSpline(u);
+
+      const speed = Math.hypot(vx, vy) || 1;
+      const dirX = vx / speed;
+      // Smooth 3D bank through 0 at each side turn, stays ~1 on straight legs
+      const bankX = Math.tanh(dirX * 2.8);
+      const flipSign = bankX < 0 ? -1 : 1;
+      const sx = flipSign * Math.max(0.06, Math.abs(bankX));
+
+      // Counter-flip banner photo right when edge-on so it stays upright & readable
+      if ((sx < 0) !== mirrored) {
+        mirrored = sx < 0;
+        bannerImg.style.transform = mirrored ? "scaleX(-1)" : "";
+      }
+
+      // Natural pitch tilt up/down (works cleanly in both left and right directions)
+      const tilt = Math.max(-24, Math.min(24, Math.atan2(vy, Math.abs(vx) + 80) * (180 / Math.PI)));
+      const grow = raw < 0.14 ? 0.45 + 0.55 * (raw / 0.14) : 1;
+
+      rig.style.opacity = raw < 0.10 ? 0.35 + 0.65 * (raw / 0.10) : 1;
+      rig.style.transform = `translate3d(${x - halfW}px, ${y - halfH}px, 0) scale(${grow * sx}, ${grow}) rotate(${tilt}deg)`;
+
+      if (raw < 1) {
+        requestAnimationFrame(frame);
+      } else {
+        // Step 4: Blast plane into flowers at the nose position
+        rig.remove();
+        blastFlowers(x + halfW * 0.55, y);
+        setTimeout(() => { planeStage.innerHTML = ""; }, 2200);
+      }
+    }
+
+    requestAnimationFrame(frame);
+  }, 340);
 };
 
 ["touchend", "click"].forEach(ev =>
@@ -323,6 +497,7 @@ function resumeAll() {
 document.addEventListener("visibilitychange", () => document.hidden ? pauseAll() : resumeAll());
 addEventListener("pagehide", pauseAll);
 addEventListener("pageshow", e => { if (e.persisted) resumeAll(); });
+
 /* ===== Language switch, celebrations list, family names ===== */
 const langBtn = document.getElementById("lang");
 const sched = document.getElementById("sched"), famSec = document.getElementById("fam"), famBody = document.getElementById("famBody");

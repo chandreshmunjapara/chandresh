@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" media="print" onload="this.media='all'"
     href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&family=Noto+Serif+Gujarati:wght@500;700&family=Tiro+Devanagari+Hindi&display=swap">
-  <link rel="stylesheet" href="style.css?v=32">
+  <link rel="stylesheet" href="style.css?v=33">
 </head>
 
 <body>
@@ -110,10 +110,19 @@
       <div class="om">ॐ</div>
       <h2 class="script" data-gu="ચંદ્રેશ &amp; જાન્વી">Chandresh &amp; Janvi</h2>
       <p class="small" data-gu="લગ્ન આમંત્રણ">Wedding invitation</p>
-      <button id="open" data-gu='<span class="seal-heart">❤</span><span class="seal-txt">ખોલવા ટેપ કરો</span>'><span
-    class="seal-heart">❤</span><span class="seal-txt">Tap to open</span></button>
+
+      <button id="open" class="env-btn" type="button" aria-label="Tap to open invitation">
+        <span class="env-body">
+          <span class="env-flap"></span>
+          <span class="env-fold-l"></span>
+          <span class="env-fold-r"></span>
+          <span class="env-seal">❤</span>
+        </span>
+        <span class="env-txt" data-gu="ખોલવા ટેપ કરો">Tap to open</span>
+      </button>
     </div>
   </div>
+  <div id="plane-stage" aria-hidden="true"></div>
   <button id="snd" hidden aria-label="Music on or off">🔊</button>
   <button id="lang" aria-label="Change language">ગુજરાતી</button>
   <div id="petals" aria-hidden="true"></div>
@@ -485,7 +494,7 @@
       ❤</p>
   </section>
 
-  <script src="script.js?v=32"></script>
+  <script src="script.js?v=33"></script>
 </body>
 
 </html>

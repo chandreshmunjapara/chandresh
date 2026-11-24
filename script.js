@@ -84,10 +84,11 @@ const CONFIG = {
       query: "entry.2606285"
     }
   },
-  bgVideo: "images/bgvideo.mp4",   // "" = no video
-  planeBanner: "images/banner.jpeg", // banner photo attached to the paper plane
+  bgVideo: "images/bgvideo.mp4",      // "" = no video (deferred until after intro opens)
+  planeBanner: "images/banner.webp",  // falls back to images/banner.jpg -> images/1.jpeg
+  planeBannerFallback: "images/banner.jpeg",
   weddingDate: "2027-02-02T11:00:00",
-  whatsapp: "919825167545",        // country code + number, no + or spaces
+  whatsapp: "919825167545",           // country code + number, no + or spaces
   photos: [
     { src: "images/1.jpeg" }, { src: "images/2.jpeg" }, { src: "images/3.jpeg" },
     { src: "images/4.jpeg" }, { src: "images/5.jpeg" }, { src: "images/6.jpeg" },
@@ -97,18 +98,19 @@ const CONFIG = {
   ]
 };
 
-/* ===== Background video: starts at page load, plays on every page ===== */
+/* ===== Background video: deferred so photos load first, skipped on 2G/Data Saver ===== */
 const bgVid = document.getElementById("bg-vid");
-if (bgVid && CONFIG.bgVideo && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
-  bgVid.muted = true; bgVid.loop = true; bgVid.playsInline = true; bgVid.preload = "auto";
+const conn = navigator.connection || {};
+const slowNet = Boolean(conn.saveData || /(2g)/.test(conn.effectiveType || ""));
+
+function startBgVideo() {
+  if (!bgVid || !CONFIG.bgVideo || slowNet || bgVid.getAttribute("src") || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  bgVid.muted = true; bgVid.loop = true; bgVid.playsInline = true; bgVid.preload = "metadata";
   bgVid.addEventListener("playing", () => bgVid.classList.add("on"));
   bgVid.addEventListener("error", () => { bgVid.hidden = true; });
   bgVid.src = CONFIG.bgVideo;
   bgVid.hidden = false;
-  const playVid = () => { if (bgVid.paused) bgVid.play().catch(() => { }); };
-  playVid();
-  document.addEventListener("touchstart", playVid, { once: true, passive: true });
-  document.getElementById("open").addEventListener("click", playVid);
+  bgVid.play().catch(() => { });
 }
 
 /* ===== Language helpers ===== */
@@ -150,7 +152,6 @@ function petalBurst() {
 /* ===== Gate: tap the diya (or the doors) to open ===== */
 const gate = document.getElementById("gate"), stage = gate.querySelector(".stage");
 
-// light scroll handler: toggles one class, once per frame
 let ticking = false, wasScrolled = false;
 addEventListener("scroll", () => {
   if (ticking) return;
@@ -172,9 +173,6 @@ function openGate(scroll = true) {
 document.getElementById("diya").addEventListener("click", () => openGate(true));
 stage.querySelectorAll(".door").forEach(d => d.addEventListener("click", () => openGate(true)));
 
-// Tap is the main way to open. Fallback if the guest only scrolls:
-//  - gate fully in view for 3s without a tap -> open it (they have had time to see it)
-//  - guest scrolls past more than half of the closed gate -> open it so it is not skipped
 let autoTimer = null;
 new IntersectionObserver(es => {
   const e = es[es.length - 1];
@@ -199,20 +197,24 @@ const io = new IntersectionObserver(es => es.forEach(e => {
 }), { threshold: .2 });
 document.querySelectorAll(".reveal").forEach(el => io.observe(el));
 
-/* ===== Toran: photos hanging across the page ===== */
+/* ===== Toran: lazy-loaded WebP thumbnails, full photo on lightbox tap ===== */
 const colors = ["#b3202f,#d9a441", "#5a0f1c,#ff8fa3", "#d9a441,#7a1626", "#7a1626,#fff4dc"];
 const track = document.getElementById("track"), lb = document.getElementById("lb");
 const n = CONFIG.photos.length;
 const reps = Math.max(1, Math.ceil(innerWidth / (n * 120)) + 1);
-const one = CONFIG.photos.map((p, i) =>
-  `<figure class="hang" style="--d:${-(i % 3) * 1.1}s"><i class="str"></i><div class="frame" style="background-image:url(${p.src}),linear-gradient(135deg,${colors[i % 4]})"></div><b>🌼</b></figure>`).join("");
+const one = CONFIG.photos.map((p, i) => {
+  const thumb = p.src.replace("images/", "images/thumbs/").replace(/\.jpe?g$/i, ".webp");
+  return `<figure class="hang" style="--d:${-(i % 3) * 1.1}s"><i class="str"></i><div class="frame" data-full="${p.src}" style="background:linear-gradient(135deg,${colors[i % 4]})"><img src="${thumb}" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${p.src}'"></div><b>🌼</b></figure>`;
+}).join("");
 const half = one.repeat(reps);
 track.innerHTML = half + half;
 track.style.setProperty("--t", reps * n * 5 + "s");
 track.addEventListener("click", e => {
   const f = e.target.closest(".frame");
   if (!f) return;
-  lb.style.backgroundImage = f.style.backgroundImage;
+  const img = f.querySelector("img");
+  const fallback = img ? img.currentSrc || img.src : "";
+  lb.style.backgroundImage = `url(${f.dataset.full}), url(${fallback})`;
   lb.classList.add("on");
 });
 lb.onclick = () => lb.classList.remove("on");
@@ -273,14 +275,14 @@ rsvpForm.addEventListener("submit", async e => {
   sendBtn.disabled = false; sendBtn.innerHTML = LANG === "gu" ? sendBtn.dataset.gu : sendBtn.dataset.en;
 });
 
-/* ===== Opening screen + letter -> paper plane -> flower blast + music ===== */
+/* ===== Opening screen + preloaded banner + full-screen S-loop plane + flower blast + deferred music ===== */
 history.scrollRestoration = "manual"; scrollTo(0, 0);
 document.documentElement.classList.add("lock");
 document.body.classList.add("lock");
 const intro = document.getElementById("intro"), snd = document.getElementById("snd");
 
 const au = new Audio();
-au.src = CONFIG.music; au.loop = true; au.volume = 0.6; au.preload = "auto";
+au.src = CONFIG.music; au.loop = true; au.volume = 0.6; au.preload = "none";
 let started = false, userPaused = false, pausedByHide = false;
 
 const setIcon = () => { snd.textContent = au.paused ? "🔇" : "🔊"; };
@@ -293,12 +295,33 @@ const openBtn = document.getElementById("open");
 const planeStage = document.getElementById("plane-stage");
 let isOpening = false;
 
+// Preload banner image immediately with graceful fallback (.webp -> .jpg -> first photo)
+const bannerCandidates = [
+  CONFIG.planeBanner,
+  CONFIG.planeBannerFallback,
+  CONFIG.photos[0] && CONFIG.photos[0].src
+].filter(Boolean);
+
+let resolvedBannerSrc = bannerCandidates[0] || "";
+const bannerPreload = new Image();
+bannerPreload.decoding = "async";
+let bannerIdx = 0;
+function loadNextBanner() {
+  if (bannerIdx >= bannerCandidates.length) return;
+  resolvedBannerSrc = bannerCandidates[bannerIdx++];
+  bannerPreload.src = resolvedBannerSrc;
+}
+bannerPreload.onerror = loadNextBanner;
+loadNextBanner();
+
 function revealMainPage() {
   intro.classList.add("gone");
   document.documentElement.classList.remove("lock");
   document.body.classList.remove("lock");
   document.body.classList.add("ready");
   setTimeout(() => intro.remove(), 1200);
+  // Start background video only after intro & images settle
+  setTimeout(startBgVideo, 1500);
 }
 
 function blastFlowers(x, y) {
@@ -315,7 +338,7 @@ function blastFlowers(x, y) {
   ring.animate([
     { transform: "scale(0.5)", opacity: 1 },
     { transform: "scale(5.5)", opacity: 0 }
-  ], { duration: 520, easing: "cubic-bezier(.15,.85,.35,1)", fill: "forwards" })
+  ], { duration: 600, easing: "cubic-bezier(.15,.85,.35,1)", fill: "forwards" })
     .onfinish = () => ring.remove();
 
   for (let i = 0; i < count; i++) {
@@ -330,7 +353,7 @@ function blastFlowers(x, y) {
     const ty = Math.sin(angle) * dist;
     const fallY = ty + 70 + Math.random() * 90;
     const rot = (Math.random() > 0.5 ? 1 : -1) * (120 + Math.random() * 240);
-    const dur = 1150 + Math.random() * 550;
+    const dur = 1800 + Math.random() * 700;
 
     planeStage.appendChild(el);
     el.animate([
@@ -363,114 +386,117 @@ openBtn.onclick = () => {
   const startY = rect.top + rect.height / 2;
   openBtn.classList.add("folding");
 
+  // Wait up to 600ms for banner decode on slow networks so plane never flies blank
+  const waitBanner = bannerPreload.complete
+    ? Promise.resolve()
+    : Promise.race([
+        bannerPreload.decode().catch(() => { }),
+        new Promise(r => setTimeout(r, 600))
+      ]);
+
   // Step 2: Spawn paper plane + attached banner photo
-  setTimeout(() => {
-    const rig = document.createElement("div");
-    rig.className = "plane-rig";
-    rig.style.transformOrigin = "50% 50%";
+  waitBanner.then(() => {
+    setTimeout(() => {
+      const rig = document.createElement("div");
+      rig.className = "plane-rig";
+      const fallbackSrc = (CONFIG.photos[0] && CONFIG.photos[0].src) || "";
 
-    const bannerSrc = CONFIG.planeBanner || (CONFIG.photos[0] && CONFIG.photos[0].src) || "";
-    const fallbackSrc = (CONFIG.photos[0] && CONFIG.photos[0].src) || "";
+      rig.innerHTML = `
+        <div class="plane-banner">
+          <img src="${resolvedBannerSrc}" alt="Wedding banner" onerror="this.onerror=null;if('${fallbackSrc}')this.src='${fallbackSrc}';">
+        </div>
+        <svg class="plane-tether" viewBox="0 0 30 48" aria-hidden="true">
+          <path d="M0 10 Q15 16 30 24 M0 38 Q15 32 30 24" fill="none" stroke="#d9a441" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <svg class="plane-svg" viewBox="0 0 96 64" aria-hidden="true">
+          <polygon points="4,22 94,32 22,40" fill="#fffaf0" stroke="#c9962f" stroke-width="2" stroke-linejoin="round"/>
+          <polygon points="22,40 94,32 32,58" fill="#ebd09a" stroke="#c9962f" stroke-width="2" stroke-linejoin="round"/>
+          <polygon points="22,40 32,58 44,44" fill="#d3a85b" stroke="#b98322" stroke-width="1.5" stroke-linejoin="round"/>
+          <polygon points="4,22 94,32 36,10" fill="#fffdf7" stroke="#c9962f" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M18 28 L76 32" stroke="#b3202f" stroke-width="1.6" stroke-dasharray="4 3" opacity=".75"/>
+        </svg>`;
 
-    rig.innerHTML = `
-      <div class="plane-banner">
-        <img src="${bannerSrc}" alt="Wedding banner" onerror="this.onerror=null;if('${fallbackSrc}')this.src='${fallbackSrc}';">
-      </div>
-      <svg class="plane-tether" viewBox="0 0 30 48" aria-hidden="true">
-        <path d="M0 10 Q15 16 30 24 M0 38 Q15 32 30 24" fill="none" stroke="#d9a441" stroke-width="2" stroke-linecap="round"/>
-      </svg>
-      <svg class="plane-svg" viewBox="0 0 96 64" aria-hidden="true">
-        <polygon points="4,22 94,32 22,40" fill="#fffaf0" stroke="#c9962f" stroke-width="2" stroke-linejoin="round"/>
-        <polygon points="22,40 94,32 32,58" fill="#ebd09a" stroke="#c9962f" stroke-width="2" stroke-linejoin="round"/>
-        <polygon points="22,40 32,58 44,44" fill="#d3a85b" stroke="#b98322" stroke-width="1.5" stroke-linejoin="round"/>
-        <polygon points="4,22 94,32 36,10" fill="#fffdf7" stroke="#c9962f" stroke-width="2" stroke-linejoin="round"/>
-        <path d="M18 28 L76 32" stroke="#b3202f" stroke-width="1.6" stroke-dasharray="4 3" opacity=".75"/>
-      </svg>`;
+      planeStage.appendChild(rig);
 
-    planeStage.appendChild(rig);
+      const bannerImg = rig.querySelector(".plane-banner img");
+      const rigRect = rig.getBoundingClientRect();
+      const halfW = rigRect.width / 2;
+      const halfH = rigRect.height / 2;
+      const W = innerWidth, H = innerHeight;
+      const padX = Math.min(Math.max(W * 0.14, 52), 130);
 
-    const bannerImg = rig.querySelector(".plane-banner img");
-    const rigRect = rig.getBoundingClientRect();
-    const halfW = rigRect.width / 2;
-    const halfH = rigRect.height / 2;
-    const W = innerWidth, H = innerHeight;
-    const padX = Math.min(Math.max(W * 0.14, 52), 130);
+      // Full-screen S-loop waypoints: Envelope -> Right turn -> Full left glide -> Left turn -> Upper-center blast
+      const pts = [
+        { x: startX, y: startY },
+        { x: W - padX, y: Math.min(H * 0.68, startY - H * 0.05) },
+        { x: W - padX * 0.72, y: H * 0.45 },
+        { x: W * 0.50, y: H * 0.50 },
+        { x: padX * 0.72, y: H * 0.42 },
+        { x: padX, y: H * 0.24 },
+        { x: W * 0.52, y: H * 0.24 }
+      ];
 
-    // Full-screen S-loop waypoints: Envelope -> Right turn -> Full left glide -> Left turn -> Upper-center blast
-    const pts = [
-      { x: startX, y: startY },
-      { x: W - padX, y: Math.min(H * 0.68, startY - H * 0.05) },
-      { x: W - padX * 0.72, y: H * 0.45 },
-      { x: W * 0.50, y: H * 0.50 },
-      { x: padX * 0.72, y: H * 0.42 },
-      { x: padX, y: H * 0.24 },
-      { x: W * 0.52, y: H * 0.24 }
-    ];
+      function sampleSpline(u) {
+        const segs = pts.length - 1;
+        const scaled = Math.max(0, Math.min(segs - 1e-6, u * segs));
+        const i = Math.floor(scaled);
+        const t = scaled - i;
+        const p0 = pts[Math.max(0, i - 1)];
+        const p1 = pts[i];
+        const p2 = pts[Math.min(segs, i + 1)];
+        const p3 = pts[Math.min(segs, i + 2)];
+        const t2 = t * t, t3 = t2 * t;
 
-    // Smooth Catmull-Rom spline sampler
-    function sampleSpline(u) {
-      const segs = pts.length - 1;
-      const scaled = Math.max(0, Math.min(segs - 1e-6, u * segs));
-      const i = Math.floor(scaled);
-      const t = scaled - i;
-      const p0 = pts[Math.max(0, i - 1)];
-      const p1 = pts[i];
-      const p2 = pts[Math.min(segs, i + 1)];
-      const p3 = pts[Math.min(segs, i + 2)];
-      const t2 = t * t, t3 = t2 * t;
-
-      const x = 0.5 * ((2 * p1.x) + (-p0.x + p2.x) * t + (2 * p0.x - 5 * p1.x + 4 * p2.x - p3.x) * t2 + (-p0.x + 3 * p1.x - 3 * p2.x + p3.x) * t3);
-      const y = 0.5 * ((2 * p1.y) + (-p0.y + p2.y) * t + (2 * p0.y - 5 * p1.y + 4 * p2.y - p3.y) * t2 + (-p0.y + 3 * p1.y - 3 * p2.y + p3.y) * t3);
-      const vx = 0.5 * ((-p0.x + p2.x) + 2 * (2 * p0.x - 5 * p1.x + 4 * p2.x - p3.x) * t + 3 * (-p0.x + 3 * p1.x - 3 * p2.x + p3.x) * t2);
-      const vy = 0.5 * ((-p0.y + p2.y) + 2 * (2 * p0.y - 5 * p1.y + 4 * p2.y - p3.y) * t + 3 * (-p0.y + 3 * p1.y - 3 * p2.y + p3.y) * t2);
-      return { x, y, vx, vy };
-    }
-
-    // Step 3: Reveal the second page smoothly right after takeoff
-    setTimeout(revealMainPage, 320);
-
-    const DURATION = 5500;
-    const t0 = performance.now();
-    let mirrored = false;
-
-    function frame(now) {
-      const raw = Math.min(1, (now - t0) / DURATION);
-      // Gentle ease-in at takeoff, steady readable cruise across the screen
-      const u = raw < 0.12 ? (raw * raw) / 0.12 : raw;
-      const { x, y, vx, vy } = sampleSpline(u);
-
-      const speed = Math.hypot(vx, vy) || 1;
-      const dirX = vx / speed;
-      // Smooth 3D bank through 0 at each side turn, stays ~1 on straight legs
-      const bankX = Math.tanh(dirX * 2.8);
-      const flipSign = bankX < 0 ? -1 : 1;
-      const sx = flipSign * Math.max(0.06, Math.abs(bankX));
-
-      // Counter-flip banner photo right when edge-on so it stays upright & readable
-      if ((sx < 0) !== mirrored) {
-        mirrored = sx < 0;
-        bannerImg.style.transform = mirrored ? "scaleX(-1)" : "";
+        const x = 0.5 * ((2 * p1.x) + (-p0.x + p2.x) * t + (2 * p0.x - 5 * p1.x + 4 * p2.x - p3.x) * t2 + (-p0.x + 3 * p1.x - 3 * p2.x + p3.x) * t3);
+        const y = 0.5 * ((2 * p1.y) + (-p0.y + p2.y) * t + (2 * p0.y - 5 * p1.y + 4 * p2.y - p3.y) * t2 + (-p0.y + 3 * p1.y - 3 * p2.y + p3.y) * t3);
+        const vx = 0.5 * ((-p0.x + p2.x) + 2 * (2 * p0.x - 5 * p1.x + 4 * p2.x - p3.x) * t + 3 * (-p0.x + 3 * p1.x - 3 * p2.x + p3.x) * t2);
+        const vy = 0.5 * ((-p0.y + p2.y) + 2 * (2 * p0.y - 5 * p1.y + 4 * p2.y - p3.y) * t + 3 * (-p0.y + 3 * p1.y - 3 * p2.y + p3.y) * t2);
+        return { x, y, vx, vy };
       }
 
-      // Natural pitch tilt up/down (works cleanly in both left and right directions)
-      const tilt = Math.max(-24, Math.min(24, Math.atan2(vy, Math.abs(vx) + 80) * (180 / Math.PI)));
-      const grow = raw < 0.14 ? 0.45 + 0.55 * (raw / 0.14) : 1;
+      // Step 3: Open the second page smoothly right after takeoff
+      setTimeout(revealMainPage, 500);
 
-      rig.style.opacity = raw < 0.10 ? 0.35 + 0.65 * (raw / 0.10) : 1;
-      rig.style.transform = `translate3d(${x - halfW}px, ${y - halfH}px, 0) scale(${grow * sx}, ${grow}) rotate(${tilt}deg)`;
+      const DURATION = 5500;
+      const t0 = performance.now();
+      let mirrored = false;
 
-      if (raw < 1) {
-        requestAnimationFrame(frame);
-      } else {
-        // Step 4: Blast plane into flowers at the nose position
-        rig.remove();
-        blastFlowers(x + halfW * 0.55, y);
-        setTimeout(() => { planeStage.innerHTML = ""; }, 2200);
+      function frame(now) {
+        const raw = Math.min(1, (now - t0) / DURATION);
+        const u = raw < 0.12 ? (raw * raw) / 0.12 : raw;
+        const { x, y, vx, vy } = sampleSpline(u);
+
+        const speed = Math.hypot(vx, vy) || 1;
+        const dirX = vx / speed;
+        const bankX = Math.tanh(dirX * 2.8);
+        const flipSign = bankX < 0 ? -1 : 1;
+        const sx = flipSign * Math.max(0.06, Math.abs(bankX));
+
+        // Counter-flip banner photo right when edge-on so it stays upright & readable
+        if ((sx < 0) !== mirrored) {
+          mirrored = sx < 0;
+          bannerImg.style.transform = mirrored ? "scaleX(-1)" : "";
+        }
+
+        const tilt = Math.max(-24, Math.min(24, Math.atan2(vy, Math.abs(vx) + 80) * (180 / Math.PI)));
+        const grow = raw < 0.14 ? 0.45 + 0.55 * (raw / 0.14) : 1;
+
+        rig.style.opacity = raw < 0.10 ? 0.35 + 0.65 * (raw / 0.10) : 1;
+        rig.style.transform = `translate3d(${x - halfW}px, ${y - halfH}px, 0) scale(${grow * sx}, ${grow}) rotate(${tilt}deg)`;
+
+        if (raw < 1) {
+          requestAnimationFrame(frame);
+        } else {
+          // Step 4: Blast plane into flowers
+          rig.remove();
+          blastFlowers(x + halfW * 0.55, y);
+          setTimeout(() => { planeStage.innerHTML = ""; }, 2800);
+        }
       }
-    }
 
-    requestAnimationFrame(frame);
-  }, 340);
+      requestAnimationFrame(frame);
+    }, 340);
+  });
 };
 
 ["touchend", "click"].forEach(ev =>

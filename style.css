@@ -176,7 +176,6 @@ section {
 #reach,
 #rsvp {
   padding-top: calc(112px + 1.2rem);
- 
 }
 
 #events::before,
@@ -290,11 +289,17 @@ body.scrolled .toran {
   height: var(--h);
   border: 4px solid var(--gold);
   border-radius: 50% 50% 8px 8px/30% 30% 8px 8px;
-  background-size: cover;
-  background-position: center;
+  overflow: hidden;
   box-shadow: 0 6px 12px #0007;
   pointer-events: auto;
   cursor: pointer
+}
+
+.frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .hang b {
@@ -705,7 +710,6 @@ body:not(.ready) #hero * {
 #diya {
   position: absolute;
   left: 50%;
-  /* Positions the diya vertically aligned near the lower-center of the deity arches */
   top: calc(var(--tor1) + 3.8rem + (100svh - var(--tor1) - 3.8rem - var(--H) - 3svh - 3rem) * 0.65);
   translate: -50% -50%;
   z-index: 8;
@@ -1717,7 +1721,7 @@ body:not(.ready) #hero * {
   display: flex;
   align-items: center;
   will-change: transform, opacity;
-  transform-origin: 85% 50%;
+  transform-origin: 50% 50%;
 }
 
 .plane-banner {
@@ -1815,7 +1819,7 @@ body:not(.ready) #hero * {
   opacity: .95
 }
 
-/* ================= BACKGROUND VIDEO (shown on phones too) ================= */
+/* ================= BACKGROUND VIDEO (deferred for fast load) ================= */
 .bg-video {
   position: fixed;
   inset: 0;
@@ -1826,7 +1830,7 @@ body:not(.ready) #hero * {
   transition: opacity 1.2s;
   pointer-events: none;
   z-index: 30;
-   transform: translateZ(0)
+  transform: translateZ(0)
 }
 
 .bg-video.on {
@@ -1925,6 +1929,7 @@ body {
   font-weight: 700;
   animation: dpulse 1.8s ease-in-out infinite
 }
+
 /* pause off-screen animations (class added by script) */
 .paused,
 .paused *,
@@ -1957,7 +1962,7 @@ body.scrolling .lane * {
   .hang { animation: none }
   .frame { box-shadow: 0 3px 6px #0005 }
   .inside {
-    transform: none;                    /* fade in instead of scaling */
+    transform: none;
     transition: opacity 1.2s .5s;
     -webkit-mask-image: none;
     mask-image: none

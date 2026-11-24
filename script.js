@@ -105,11 +105,12 @@ const slowNet = Boolean(conn.saveData || /(2g)/.test(conn.effectiveType || ""));
 
 function startBgVideo() {
   if (!bgVid || !CONFIG.bgVideo || slowNet || bgVid.getAttribute("src") || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  bgVid.muted = true; bgVid.loop = true; bgVid.playsInline = true; bgVid.preload = "metadata";
-  bgVid.addEventListener("playing", () => bgVid.classList.add("on"));
-  bgVid.addEventListener("error", () => { bgVid.hidden = true; });
+  bgVid.muted = true; bgVid.loop = true; bgVid.playsInline = true; bgVid.preload = "auto";
+  bgVid.addEventListener("playing", () => bgVid.classList.add("on"), { once: true });
+  bgVid.addEventListener("error", () => { bgVid.hidden = true; }, { once: true });
   bgVid.src = CONFIG.bgVideo;
   bgVid.hidden = false;
+  bgVid.load();
   bgVid.play().catch(() => { });
 }
 
@@ -320,10 +321,8 @@ function revealMainPage() {
   document.body.classList.remove("lock");
   document.body.classList.add("ready");
   setTimeout(() => intro.remove(), 1200);
-  // Start background video only after intro & images settle
-  setTimeout(startBgVideo, 1500);
+  startBgVideo();
 }
-
 function blastFlowers(x, y) {
   const isMobile = innerWidth < 700;
   const count = isMobile ? 28 : 42;

@@ -1805,7 +1805,7 @@ body:not(.ready) #hero * {
 
 #snd {
   right: 14px;
-  z-index: 60;
+  z-index: 210;
   width: 40px;
   border-radius: 50%;
   font-size: 1.1rem
@@ -1819,7 +1819,7 @@ body:not(.ready) #hero * {
   opacity: .95
 }
 
-/* ================= BACKGROUND VIDEO (deferred for fast load) ================= */
+/* ================= BACKGROUND VIDEO (plays on the landing page & all pages) ================= */
 .bg-video {
   position: fixed;
   inset: 0;
@@ -1827,14 +1827,14 @@ body:not(.ready) #hero * {
   height: 100%;
   object-fit: cover;
   opacity: 0;
-  transition: opacity 1.2s;
+  transition: opacity .5s;
   pointer-events: none;
   z-index: 30;
   transform: translateZ(0)
 }
 
 .bg-video.on {
-  opacity: .15
+  opacity: .18
 }
 
 body:not(.ready) .bg-video {

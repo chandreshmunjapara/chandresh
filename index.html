@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="gu">
 
 <head>
   <meta charset="UTF-8">
@@ -12,11 +12,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" media="print" onload="this.media='all'"
     href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,600;0,700;1,600;1,700&family=Noto+Serif+Gujarati:wght@500;700&family=Tiro+Devanagari+Hindi&display=swap">
-  <link rel="stylesheet" href="style.css?v=35">
+  <link rel="stylesheet" href="style.css?v=44">
 </head>
 
-<body>
-  <video id="bg-vid" class="bg-video" loop muted playsinline hidden aria-hidden="true"></video>
+<body class="gu">
+  <video id="bg-vid" class="bg-video" src="images/bgvideo.mp4" loop muted playsinline preload="auto" aria-hidden="true"></video>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
     <defs>
       <pattern id="bd" width="8" height="8" patternUnits="userSpaceOnUse">
@@ -109,8 +109,8 @@
     <div>
       <p class="hi">॥ શ્રી ગણેશાય નમઃ ॥</p>
       <div class="om">ॐ</div>
-      <h2 class="script" data-gu="ચંદ્રેશ &amp; જાન્વી">Chandresh &amp; Janvi</h2>
-      <p class="small" data-gu="લગ્ન આમંત્રણ">Wedding invitation</p>
+      <h2 class="script" data-en="Chandresh &amp; Janvi" data-gu="ચંદ્રેશ &amp; જાન્વી">ચંદ્રેશ &amp; જાન્વી</h2>
+      <p class="small" data-en="Wedding invitation" data-gu="લગ્ન આમંત્રણ">લગ્ન આમંત્રણ</p>
 
       <button id="open" class="env-btn" type="button" aria-label="Tap to open invitation">
         <span class="env-body">
@@ -119,13 +119,13 @@
           <span class="env-fold-r"></span>
           <span class="env-seal">❤</span>
         </span>
-        <span class="env-txt" data-gu="ખોલવા ટેપ કરો">Tap to open</span>
+        <span class="env-txt" data-en="Tap to open" data-gu="ખોલવા ટેપ કરો">ખોલવા ટેપ કરો</span>
       </button>
     </div>
   </div>
   <div id="plane-stage" aria-hidden="true"></div>
-  <button id="snd" hidden aria-label="Music on or off">🔊</button>
-  <button id="lang" aria-label="Change language">ગુજરાતી</button>
+  <button id="snd" aria-label="Music on or off">🔊</button>
+  <button id="lang" aria-label="Change language">English</button>
   <div id="petals" aria-hidden="true"></div>
 
   <!-- TORAN: photo slideshow hanging across the whole page -->
@@ -140,7 +140,7 @@
     <p class="hi">॥ શ્રી ગણેશાય નમઃ ॥</p>
     <p class="small" data-gu="અમે લગ્નગ્રંથિથી જોડાઈ રહ્યા છીએ">We are getting married</p>
     <h1 class="script" data-gu="ચંદ્રેશ <span>&amp;</span> જાન્વી">Chandresh <span>&amp;</span> Janvi</h1>
-    <p class="date">02 · 02 · 2027</p>
+    <p class="date" data-gu="૦૨ · ૦૨ · ૨૦૨૭">02 · 02 · 2027</p>
 
     <div class="couple">
       <svg class="person groom" viewBox="0 0 140 262" aria-label="Groom in Gujarati dress doing namaste">
@@ -176,7 +176,6 @@
     <p class="welcome"><span class="hi">સ્વાગતમ્</span> <span
         data-gu="જય શ્રી કૃષ્ણ 🙏 અમારા લગ્નમાં આપનું હાર્દિક સ્વાગત છે">Jai Shree Krishna 🙏 welcome to our
         wedding</span></p>
-
   </header>
 
   <!-- 2. GATE: tap the diya to open -->
@@ -392,7 +391,7 @@
           <rect y="133" width="600" height="3" fill="#d0d0d0" />
           <path d="M475 120v12M535 120v12" stroke="#555" stroke-width="3" />
           <rect x="450" y="96" width="110" height="24" rx="4" fill="#fff" stroke="#b3202f" stroke-width="2" /><text
-            x="505" y="113" text-anchor="middle" font-size="14" font-weight="700" fill="#b3202f">Rajkot</text>
+            x="505" y="113" text-anchor="middle" font-size="14" font-weight="700" fill="#b3202f" data-gu="રાજકોટ">Rajkot</text>
           <g>
             <animateTransform attributeName="transform" type="translate" from="-300 0" to="620 0" dur="8s"
               repeatCount="indefinite" />
@@ -443,7 +442,7 @@
             <circle cx="540" cy="138" r="7" />
             <circle cx="540" cy="138" r="3" fill="#fff" />
           </g>
-          <text x="540" y="163" text-anchor="middle" font-size="15" font-weight="700" fill="#5a0f1c">Rajkot</text>
+          <text x="540" y="163" text-anchor="middle" font-size="15" font-weight="700" fill="#5a0f1c" data-gu="રાજકોટ">Rajkot</text>
           <g>
             <animateMotion dur="7s" repeatCount="indefinite" rotate="auto" path="M-30 150Q280 -70 540 138" />
             <g transform="scale(1.4)">
@@ -495,7 +494,7 @@
       ❤</p>
   </section>
 
-  <script src="script.js?v=35"></script>
+  <script src="script.js?v=45"></script>
 </body>
 
 </html>

@@ -1,8 +1,8 @@
 /* ====== EDIT THESE DETAILS ====== */
 const CONFIG = {
   venue: "Kunkavav, Gujarat",
-  venueCity: "Kunkavav",
-  defaultLang: "gu",   // "en" = English first, "gu" = Gujarati first (guests can switch with the button)
+  venueCity: { en: "Kunkavav", gu: "કુંકાવાવ" },
+  defaultLang: "gu",   // always opens in Gujarati; guests can switch with the button (not remembered)
   venueText: { en: "Kunkavav, Gujarat", gu: "કુંકાવાવ, ગુજરાત" },
 
   // ---- Celebrations: one block per event. Add or delete blocks freely. ----
@@ -84,8 +84,8 @@ const CONFIG = {
       query: "entry.2606285"
     }
   },
-  bgVideo: "images/bgvideo.mp4",      // "" = no video (deferred until after intro opens)
-  planeBanner: "images/banner.webp",  // falls back to images/banner.jpg -> images/1.jpeg
+  bgVideo: "images/bgvideo.mp4",      // "" = no video (starts on the main page, after Tap to Open)
+  // planeBanner: "images/banner.webp",  // falls back to images/banner.jpg -> images/1.jpeg
   planeBannerFallback: "images/banner.jpeg",
   weddingDate: "2027-02-02T11:00:00",
   whatsapp: "919825167545",           // country code + number, no + or spaces
@@ -98,25 +98,41 @@ const CONFIG = {
   ]
 };
 
-/* ===== Background video: deferred so photos load first, skipped on 2G/Data Saver ===== */
+/* ===== Background video: plays on the first landing page (Tap to open) and stays on ===== */
 const bgVid = document.getElementById("bg-vid");
 const conn = navigator.connection || {};
-const slowNet = Boolean(conn.saveData || /(2g)/.test(conn.effectiveType || ""));
+let mainStarted = false;   // becomes true when the invitation opens (after Tap to open)
 
-function startBgVideo() {
-  if (!bgVid || !CONFIG.bgVideo || slowNet || bgVid.getAttribute("src") || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  bgVid.muted = true; bgVid.loop = true; bgVid.playsInline = true; bgVid.preload = "auto";
+function initBgVideo() {
+  if (!bgVid) return;
+  if (!CONFIG.bgVideo || conn.saveData) {
+    bgVid.hidden = true;
+    return;
+  }
+  bgVid.muted = true;
+  bgVid.defaultMuted = true;
+  bgVid.setAttribute("muted", "");
+  bgVid.loop = true;
+  bgVid.playsInline = true;
+  bgVid.preload = "auto";
+  bgVid.pause();
+
+  // Fade in only once it is really playing (never a frozen frame)
   bgVid.addEventListener("playing", () => bgVid.classList.add("on"), { once: true });
   bgVid.addEventListener("error", () => { bgVid.hidden = true; }, { once: true });
-  bgVid.src = CONFIG.bgVideo;
+
+  if (bgVid.getAttribute("src") !== CONFIG.bgVideo) bgVid.src = CONFIG.bgVideo;
   bgVid.hidden = false;
-  bgVid.load();
-  bgVid.play().catch(() => { });
+}
+function startBgVideo() {
+  if (bgVid && !bgVid.hidden && bgVid.paused) bgVid.play().catch(() => { });
 }
 
+initBgVideo();
+startBgVideo();   // plays on the first landing page itself
+
 /* ===== Language helpers ===== */
-let LANG = CONFIG.defaultLang || "en";
-try { LANG = localStorage.getItem("lang") || LANG; } catch (e) { }
+let LANG = CONFIG.defaultLang || "gu";
 const tr = (en, gu) => (LANG === "gu" ? gu : en);
 const L = o => (LANG === "gu" && o.gu ? o.gu : o.en);
 const GUD = "૦૧૨૩૪૫૬૭૮૯";
@@ -254,7 +270,6 @@ CONFIG.gods.forEach((g, i) => {
 });
 
 /* ===== Venue + RSVP ===== */
-document.querySelectorAll(".dst").forEach(e => e.textContent = CONFIG.venueCity);
 document.getElementById("dir").href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(CONFIG.venue);
 const rsvpForm = document.getElementById("rsvp-form"), rsvpMsg = document.getElementById("rsvp-msg"), sendBtn = document.getElementById("send");
 document.getElementById("wa").href = "https://wa.me/" + CONFIG.whatsapp;
@@ -276,14 +291,14 @@ rsvpForm.addEventListener("submit", async e => {
   sendBtn.disabled = false; sendBtn.innerHTML = LANG === "gu" ? sendBtn.dataset.gu : sendBtn.dataset.en;
 });
 
-/* ===== Opening screen + preloaded banner + full-screen S-loop plane + flower blast + deferred music ===== */
+/* ===== Opening screen + preloaded banner + full-screen S-loop plane + flower blast + music ===== */
 history.scrollRestoration = "manual"; scrollTo(0, 0);
 document.documentElement.classList.add("lock");
 document.body.classList.add("lock");
 const intro = document.getElementById("intro"), snd = document.getElementById("snd");
 
 const au = new Audio();
-au.src = CONFIG.music; au.loop = true; au.volume = 0.6; au.preload = "none";
+au.src = CONFIG.music; au.loop = true; au.volume = 0.6; au.preload = "metadata";
 let started = false, userPaused = false, pausedByHide = false;
 
 const setIcon = () => { snd.textContent = au.paused ? "🔇" : "🔊"; };
@@ -291,6 +306,16 @@ function playMusic() {
   const p = au.play();
   if (p && p.then) p.then(setIcon).catch(setIcon); else setIcon();
 }
+
+// Landing page: try to start the song immediately. Browsers may block sound until the guest
+// touches the screen, so the first touch / click / key press anywhere starts it (see handler below).
+started = true;
+snd.hidden = false;   // sound button visible on the landing page too
+setIcon();
+au.addEventListener("play", setIcon);
+au.addEventListener("pause", setIcon);
+au.addEventListener("error", () => console.warn("Music file not found/unsupported:", CONFIG.music));
+playMusic();
 
 const openBtn = document.getElementById("open");
 const planeStage = document.getElementById("plane-stage");
@@ -315,14 +340,30 @@ function loadNextBanner() {
 bannerPreload.onerror = loadNextBanner;
 loadNextBanner();
 
+/* Browsers only allow sound after a tap, so on the tap we silently "unlock" the song,
+   then the song is un-muted and the video starts at the same moment the main page appears. */
+function primeMusic() {
+  au.muted = false;
+  if (au.paused && !userPaused) playMusic();   // normally already playing from the landing page
+}
+function startMainMedia() {
+  if (mainStarted) return;
+  mainStarted = true;
+  snd.hidden = false;
+  au.muted = false;
+  if (au.paused) playMusic(); else setIcon();
+  startBgVideo();   // no-op if already running
+}
+
 function revealMainPage() {
   intro.classList.add("gone");
   document.documentElement.classList.remove("lock");
   document.body.classList.remove("lock");
   document.body.classList.add("ready");
   setTimeout(() => intro.remove(), 1200);
-  startBgVideo();
+  startMainMedia();   // song + video begin here, on the main page only
 }
+
 function blastFlowers(x, y) {
   const isMobile = innerWidth < 700;
   const count = isMobile ? 28 : 42;
@@ -368,12 +409,11 @@ openBtn.onclick = () => {
   if (isOpening) return;
   isOpening = true;
 
-  // Start audio immediately inside user tap (required for mobile browsers)
+  // Must run synchronously inside the tap event so iOS/Android allows audio
   started = true;
-  snd.hidden = false;
-  playMusic();
+  primeMusic();
+  startBgVideo();
 
-  // Respect reduced-motion accessibility setting
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
     revealMainPage();
     return;
@@ -453,7 +493,7 @@ openBtn.onclick = () => {
         return { x, y, vx, vy };
       }
 
-      // Step 3: Open the second page smoothly right after takeoff
+      // Step 3: Open the main page smoothly right after takeoff
       setTimeout(revealMainPage, 500);
 
       const DURATION = 5500;
@@ -498,10 +538,11 @@ openBtn.onclick = () => {
   });
 };
 
-["touchend", "click"].forEach(ev =>
+["touchend", "click", "pointerup", "keydown"].forEach(ev =>
   document.addEventListener(ev, e => {
     if (e.target.closest && e.target.closest("#snd")) return;
-    if (started && !userPaused && au.paused && !document.hidden) playMusic();
+    if (!userPaused && au.paused && !document.hidden) playMusic();
+    if (!document.hidden) startBgVideo();
   }, { passive: true }));
 
 snd.onclick = () => {
@@ -517,7 +558,7 @@ function pauseAll() {
 function resumeAll() {
   if (pausedByHide && !userPaused) playMusic();
   pausedByHide = false;
-  if (bgVid && bgVid.getAttribute("src") && !bgVid.hidden) bgVid.play().catch(() => { });
+  startBgVideo();
 }
 document.addEventListener("visibilitychange", () => document.hidden ? pauseAll() : resumeAll());
 addEventListener("pagehide", pauseAll);
@@ -533,6 +574,7 @@ function renderDynamic() {
     (e.cal ? `<a class="cal" target="_blank" rel="noopener" href="${calUrl(e)}">${tr("Add to calendar", "કૅલેન્ડરમાં ઉમેરો")}</a>` : "") + `</div></article>`).join("");
   sched.querySelectorAll(".ev").forEach((el, i) => { el.classList.add("reveal"); el.style.transitionDelay = (i % 3) * 0.12 + "s"; io.observe(el); });
   document.getElementById("venue-name").textContent = L(CONFIG.venueText);
+  document.querySelectorAll(".dst").forEach(e => e.textContent = L(CONFIG.venueCity));
   const groups = CONFIG.families.filter(g => g.names && g.names.length);
   famSec.hidden = !groups.length;
   const fn = document.getElementById("famNote"), note = CONFIG.famNote ? L(CONFIG.famNote) : "";
@@ -541,6 +583,7 @@ function renderDynamic() {
 }
 function applyLang() {
   document.documentElement.lang = LANG === "gu" ? "gu" : "en";
+  document.title = LANG === "gu" ? "ચંદ્રેશ & જાન્વી – લગ્ન આમંત્રણ" : "Chandresh & Janvi – Wedding Invitation";
   document.body.classList.toggle("gu", LANG === "gu");
   document.querySelectorAll("[data-gu]").forEach(el => {
     if (el.dataset.en === undefined) el.dataset.en = el.innerHTML;
@@ -553,7 +596,7 @@ function applyLang() {
   renderDynamic();
   langBtn.textContent = LANG === "gu" ? "English" : "ગુજરાતી";
 }
-langBtn.onclick = () => { LANG = LANG === "gu" ? "en" : "gu"; try { localStorage.setItem("lang", LANG); } catch (e) { } applyLang(); };
+langBtn.onclick = () => { LANG = LANG === "gu" ? "en" : "gu"; applyLang(); };
 document.getElementById("venue-map").href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(CONFIG.venue);
 applyLang();
 
